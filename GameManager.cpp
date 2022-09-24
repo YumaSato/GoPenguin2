@@ -96,10 +96,10 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 
 	if(gameMode == 1) {
 
-		/*if (goNextFlag == 1) {
-			GoNext();
+		if (goNextFlag == 1) {
+			GoNext(gameBuf);
 			return 0;
-		}*/
+		}
 
 
 
@@ -120,6 +120,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 					camera->actingX = handledCharacters[moveCount].x;
 					camera->actingY = handledCharacters[moveCount].y;
 					if (handledCharacters[moveCount].selectAction(gameBuf) == 1) {//行動終了である1が帰ってきたら次キャラへ
+						FindTroop(gameBuf);
 						moveCount++;
 					};
 				}
@@ -132,7 +133,10 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 
 		if (rutine == 2) {
 			if (mobCount >= 0 && mobCount < mobNum) {
-				ActMobs(gameBuf);
+				if (ActMobs(gameBuf) == 1) {//行動したモブがいたら
+					FindTroop(gameBuf);
+					goNextFlag = 1;
+				}
 			}
 			else {//mob達全員が行動を完了したら
 				turnNum++;
@@ -213,12 +217,15 @@ int GameManager::ActMobs(GameManager* gameBuf) {
 		if (mobAct == 0) {//行動が発生しなかった場合
 			mobCount++;
 			if (mobCount >= 0 && mobCount < mobNum) {
-				ActMobs(gameBuf);
+				return ActMobs(gameBuf);//最終的に行動するモブがいたら、1が返され続けて最後1が返る。
 			}
 		}
 		if (mobAct == 1) {//行動が発生してそれを表示しGoNextで待機する必要がある場合
+			camera->actingX = mobsSpeedOrder[mobCount]->x;
+			camera->actingY = mobsSpeedOrder[mobCount]->y;
 			mobCount++;
-			goNextFlag = 1;
+			FindTroop(gameBuf);
+			return 1;
 		}
 	}
 	return 0;

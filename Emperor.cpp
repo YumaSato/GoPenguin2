@@ -77,6 +77,9 @@ int Emperor::selectAction(GameManager* gameBuf) {
 
 	if ( returnKey[1] == 1 || finishFlag == true) {
 		stamina += staminaRecoverAbility;
+		if (stamina > staminaLimit) {
+			stamina = staminaLimit;
+		}
 		return 1;
 	}
 
