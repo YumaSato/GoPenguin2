@@ -276,9 +276,11 @@ int Emperor::setKids(GameManager* gameBuf) {
 	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//áŠQ•¨‚ª‚È‚¯‚ê‚ÎÝ’uB
 		if (gameBuf->board.at(cx).at(cy).creature == nullptr) {
 
-			PenguinKids kid = PenguinKids();
+			//PenguinKids kid = PenguinKids();
 			
-			gameBuf->kids[gameBuf->mobNum] = kid;
+			shared_ptr <PenguinKids> kid = make_shared<PenguinKids>(PenguinKids());
+
+			gameBuf->kids[gameBuf->mobNum] = *kid;
 			gameBuf->kids[gameBuf->mobNum].setCharacter(team, directionX, directionY, cx, cy, speed, gameBuf);
 			gameBuf->board.at(cx).at(cy).creature = &gameBuf->kids[gameBuf->mobNum];
 			gameBuf->mobNum++;
