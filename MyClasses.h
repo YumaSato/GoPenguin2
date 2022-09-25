@@ -100,7 +100,7 @@ public:
 
 	int selectAction(GameManager* gameBuf);
 	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf);
-	
+	int attack(GameManager* gameBuf);
 	
 	int requestItem(int itemNum, int x, int y, GameManager* gameBuf);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
 	int deliverItem(GameManager* gameBuf);//
