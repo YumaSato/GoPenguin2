@@ -3,6 +3,7 @@
 #include "externs.h"
 #include "consts.h"
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -18,7 +19,12 @@ class PenguinKids;
 class Creature;
 class Grid;
 class Emperor;
+
 class Item;
+class Fish1;
+class Fish2;
+class Timber;
+class Spear;
 
 
 
@@ -31,6 +37,7 @@ public:
 	string name;
 	Team team;//ペンギン不在:0、赤ペンギン:1、青ペンギン:2
 	Status status;//卵:1、大人:2、老人:3、皇帝:4
+	shared_ptr<Item> item;
 	int directionX;//向いている方向（左は-1、右は1）
 	int directionY;//向いている方向（上は-1、下は1）
 	int x;
@@ -64,8 +71,9 @@ public:
 	int castKids(GameManager* gameBuf);
 	int useItem(GameManager* gameBuf);
 	int castItem(GameManager* gameBuf);
-	int requestItem(int x, int y, GameManager* gameBuf);
-	int deliverItem(GameManager* gameBuf);
+	int requestItem(int itemNum, int x, int y, GameManager* gameBuf);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	int deliverItem(GameManager* gameBuf);//
+	int fishingItem(GameManager* gameBuf);
 
 	int killed(GameManager* gameBuf);
 
@@ -79,6 +87,10 @@ public:
 
 
 class PenguinKids : public Creature {//マス目にいるキャラクター
+
+private:
+	int fishingTurn = 0;
+
 public:
 
 	//PenguinKids* adjacent[4];
@@ -89,6 +101,10 @@ public:
 	int selectAction(GameManager* gameBuf);
 	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf);
 	
+	
+	int requestItem(int itemNum, int x, int y, GameManager* gameBuf);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	int deliverItem(GameManager* gameBuf);//
+	int fishingItem(GameManager* gameBuf);
 	
 	/*int changeDirection();
 	int attack();
@@ -137,9 +153,29 @@ public:
 
 
 
-class Item {//マス目に落ちてるアイテム
+class Item {//アイテム
+public:
+	int type;
+	string name;
+	int recoverPower;
+	int hurtPower;
 
+	Item();
+	~Item();
 };
+
+class Fish1 : public Item {
+public:
+	Fish1();
+	~Fish1();
+};
+class Fish2 : public Item {
+public:
+	Fish2();
+	~Fish2();
+};
+
+
 
 
 class Camera {
@@ -225,8 +261,8 @@ public:
 
 	vector<vector<Grid>> board;
 	//Grid** board;
-	Emperor* Emperor1;
-	Emperor* Emperor2;
+	/*Emperor* Emperor1;
+	Emperor* Emperor2;*/
 
 	
 	/*Camera camera;*/

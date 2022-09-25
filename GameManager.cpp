@@ -62,12 +62,13 @@ GameManager::GameManager(int stageLevel, int xSize, int ySize) {//コンストラクタ
 
 		}
 	}
-	Emperor1 = new Emperor();//インスタンス化
+	shared_ptr <Emperor> Emperor1 = make_shared<Emperor>(Emperor());//インスタンス化
 	Emperor1->setCharacter(red, 1, 0, 5, 5, 1001, this);
 	handledCharacters[0] = *Emperor1;
 	board[Emperor1->x][Emperor1->y].creature = &handledCharacters[0];//マス目に自分のポインタを代入。
 
-	Emperor2 = new Emperor();//インスタンス化
+	shared_ptr <Emperor> Emperor2 = make_shared<Emperor>(Emperor());
+	//Emperor* Emperor2 = new Emperor();//インスタンス化
 	Emperor2->setCharacter(blue, 0, 1, 7, 10, 1000, this);
 	handledCharacters[1] = *Emperor2;
 	board[Emperor2->x][Emperor2->y].creature = &handledCharacters[1];
@@ -84,8 +85,8 @@ GameManager::~GameManager() {
 	//	delete[] board[xi];
 	//}
 	//delete[] board;
-	delete Emperor1;
-	delete Emperor2;
+	//delete Emperor1;
+	//delete Emperor2;
 
 };
 

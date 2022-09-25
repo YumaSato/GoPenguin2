@@ -28,6 +28,7 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 	defensePower = 30;
 	attackPower = 30;
 	num = gameBuf->mobNum;
+	fishingTurn = 0;
 	
 	return 0;
 }
@@ -35,3 +36,29 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 int PenguinKids::selectAction(GameManager* gameBuf) {
 	return 0;
 }
+
+
+
+int PenguinKids::requestItem(int itemNum, int x, int y, GameManager* gameBuf) {
+	return 0;
+};
+
+int PenguinKids::deliverItem(GameManager* gameBuf) {
+	return 0;
+};
+
+int PenguinKids::fishingItem(GameManager* gameBuf) {
+	fishingTurn += GetRand(2) + 1;
+	if (fishingTurn >= 3) {
+		
+		if (GetRand(5) % 5 == 0) {
+			item = make_shared<Fish2>(Fish2());
+		}
+		else {
+			item = make_shared<Fish1>(Fish1());
+		}
+		
+		fishingTurn = 0;
+		return 0;
+	}
+};

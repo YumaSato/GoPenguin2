@@ -22,8 +22,7 @@ Creature::Creature() {//コンストラクタ。チームと位置を受け取る。
 	memset(&this->staminaRecoverAbility, NULL, sizeof(this->staminaRecoverAbility));
 	memset(&this->num, NULL, sizeof(this->num));
 
-
-
+	item = nullptr;
 	name = "Somebody";
 	giveExpPoint = 0;
 	walking = 0;
@@ -87,13 +86,16 @@ int Creature::castItem(GameManager* gameBuf) {
 	return 0;
 };
 
-int Creature::requestItem(int x, int y, GameManager* gameBuf) {
+int Creature::requestItem(int itemNum, int x, int y, GameManager* gameBuf) {
 	return 0;
 };
 
 int Creature::deliverItem(GameManager* gameBuf) {
 	return 0;
 };
+int Creature::fishingItem(GameManager* gameBuf) {
+	return 0;
+}
 
 
 

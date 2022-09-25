@@ -154,6 +154,7 @@
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="PenguinKids.cpp" />
     <ClCompile Include="PenguinSource.cpp" />
   </ItemGroup>
