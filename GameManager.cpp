@@ -120,7 +120,6 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 					camera->actingX = handledCharacters[moveCount].x;
 					camera->actingY = handledCharacters[moveCount].y;
 					if (handledCharacters[moveCount].selectAction(gameBuf) == 1) {//行動終了である1が帰ってきたら次キャラへ
-						FindTroop(gameBuf);
 						moveCount++;
 					};
 				}
@@ -134,7 +133,6 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 		if (rutine == 2) {
 			if (mobCount >= 0 && mobCount < mobNum) {
 				if (ActMobs(gameBuf) == 1) {//行動したモブがいたら
-					FindTroop(gameBuf);
 					goNextFlag = 1;
 				}
 			}
@@ -168,8 +166,6 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 		//		moveCount = 4;//植物が成長して、それを確認するGoNextがTrueになってから
 		//	}
 		//}
-
-		FindTroop(gameBuf);
 	}
 
 	if (gameMode == 2) {//勝利判定とエンディング
@@ -206,9 +202,7 @@ int GameManager::GameClear(GameManager* gameBuf) {
 	return 0;
 }
 
-int GameManager::FindTroop(GameManager* gameBuf) {
-	return 0;
-}
+
 
 int GameManager::ActMobs(GameManager* gameBuf) {
 	if (mobCount >= 0 && mobCount < mobNum) {//モブカウントがモブの数より小さい間
@@ -224,7 +218,6 @@ int GameManager::ActMobs(GameManager* gameBuf) {
 			camera->actingX = mobsSpeedOrder[mobCount]->x;
 			camera->actingY = mobsSpeedOrder[mobCount]->y;
 			mobCount++;
-			FindTroop(gameBuf);
 			return 1;
 		}
 	}

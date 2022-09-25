@@ -10,8 +10,8 @@ Grid::Grid(int x, int y) :
 	y(y),
 	creature(nullptr),
 	state(VACANT),
-	visual(0),
-	adjacent(0)
+	visual(0)
+	//adjacent(0)
 {
 }
 

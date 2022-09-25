@@ -25,8 +25,6 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 	speed = parentSpeed;
 	HP_Limit = 50;
 	HP = 50;
-	troopNum = 0;
-	troopMemberNum = 0;
 	defensePower = 30;
 	attackPower = 30;
 	num = gameBuf->mobNum;

@@ -16,8 +16,6 @@ Creature::Creature() {//コンストラクタ。チームと位置を受け取る。
 	memset(&this->y, NULL, sizeof(this->y));
 	memset(&this->HP, NULL, sizeof(this->HP));
 	memset(&this->HP_Limit, NULL, sizeof(this->HP_Limit));
-	memset(&this->troopNum, NULL, sizeof(this->troopNum));
-	memset(&this->troopMemberNum, NULL, sizeof(this->troopMemberNum));
 	memset(&this->attackPower, NULL, sizeof(this->attackPower));
 	memset(&this->defensePower, NULL, sizeof(this->defensePower));
 	memset(&this->speed, NULL, sizeof(this->speed));
@@ -57,11 +55,11 @@ int Creature::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int 
 }
 
 int Creature::selectAction(GameManager* gameBuf) {
-	return TRUE;
+	return 0;
 }
 
 int Creature::walk(GameManager* gameBuf) {
-	return FALSE;
+	return 0;
 }
 
 
@@ -70,17 +68,15 @@ int Creature::changeDirection(GameManager* gameBuf) {
 }
 
 int Creature::attack(GameManager* gameBuf) {
-	return FALSE;
+	return 0;
 }
 
 int Creature::setKids(GameManager* gameBuf) {
-	/*DrawString(800, 300, "Creature.specialMovement1メソッド実行", WHITE);
-	WaitKey();*/
-	return FALSE;
+	return 0;
 }
 
 int Creature::castKids(GameManager* gameBuf) {
-	return FALSE;
+	return 0;
 }
 
 int Creature::useItem(GameManager* gameBuf) {
@@ -90,6 +86,16 @@ int Creature::useItem(GameManager* gameBuf) {
 int Creature::castItem(GameManager* gameBuf) {
 	return 0;
 };
+
+int Creature::requestItem(int x, int y, GameManager* gameBuf) {
+	return 0;
+};
+
+int Creature::deliverItem(GameManager* gameBuf) {
+	return 0;
+};
+
+
 
 int Creature::killed(GameManager* gameBuf) {//指定地点に生物がいる前提。攻撃の内容を実行。
 	

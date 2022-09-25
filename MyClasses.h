@@ -37,8 +37,8 @@ public:
 	int y;
 	int HP;
 	int HP_Limit;
-	int troopNum;//陣番号
-	int troopMemberNum;//陣内個人番号
+	//int troopNum;//陣番号
+	//int troopMemberNum;//陣内個人番号
 	int giveExpPoint;//倒されたときに与える経験値
 	int attackPower;
 	int defensePower;
@@ -47,8 +47,8 @@ public:
 	int staminaLimit;
 	int stamina;
 
-	int num;//キャラクタ識別番号
-	bool skip;
+	int num;//キャラクタ識別番号。numが-1なのは死んだキャラの証。
+	bool skip;//現在不使用
 
 	int walking;//歩いている途中何マス目かを判別するため値。
 
@@ -64,6 +64,8 @@ public:
 	int castKids(GameManager* gameBuf);
 	int useItem(GameManager* gameBuf);
 	int castItem(GameManager* gameBuf);
+	int requestItem(int x, int y, GameManager* gameBuf);
+	int deliverItem(GameManager* gameBuf);
 
 	int killed(GameManager* gameBuf);
 
@@ -79,11 +81,15 @@ public:
 class PenguinKids : public Creature {//マス目にいるキャラクター
 public:
 
+	//PenguinKids* adjacent[4];
+
 	PenguinKids();
 	~PenguinKids();
 
 	int selectAction(GameManager* gameBuf);
 	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf);
+	
+	
 	/*int changeDirection();
 	int attack();
 	int useItem();*/
@@ -105,6 +111,8 @@ public:
 	int castKids(GameManager* gameBuf);
 	int useItem(GameManager* gameBuf);
 	int castItem(GameManager* gameBuf);
+
+
 };
 
 
@@ -121,7 +129,7 @@ public:
 	State state = VACANT;//マス目の状態。1:地面　2:水　3:毒沼
 	Creature* creature = nullptr;//マス目にいるモンスターorキャラクターのポインタ
 	int visual;//グラフィック
-	int adjacent;//隣接マスがフィールド外かを判定。
+	//int adjacent;//隣接マスがフィールド外かを判定。
 
 	Grid(int x, int y);
 	~Grid();
@@ -191,7 +199,7 @@ public:
 	int moveCharaNumber = 2;
 	/*int num_redKids = 0;
 	int num_blueKids = 0;*/
-	int mobNum = 0;//生み出されたモブの総数。新たにモブを生成するときにこれをnumにする。
+	int mobNum = 0;//生み出されたモブの総数。新たにモブを生成するときにこれをnumにする。死んだモブも残存する。
 	int score = 0;
 	int turnNum = 0;
 
@@ -208,7 +216,7 @@ public:
 
 	vector<PenguinKids*> mobsSpeedOrder;
 
-	vector<vector<PenguinKids>> troops;
+	//vector<vector<PenguinKids>> troops;
 
 	Emperor handledCharacters[CHARACTERNUM];//操作可能なキャラクタのアドレスを格納する変数。配列インデックスは、キャラ番号。
 
@@ -229,7 +237,7 @@ public:
 	/*int ScreenMove(int markX,int markY);*/
 
 	int GoNext(GameManager* gameBuf);//charaFlagはmarkXとmarkYの位置のキャラに注目
-	int FindTroop(GameManager* gameBuf);//連結陣を判定する
+	//int FindTroop(GameManager* gameBuf);//連結陣を判定する
 	int ActMobs(GameManager* gameBuf);//モブを動かす。
 	int FinishGame(GameManager* gameBuf);
 

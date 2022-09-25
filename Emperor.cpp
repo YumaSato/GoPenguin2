@@ -38,8 +38,6 @@ int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int i
 	this->status = EMPEROR;
 	this->HP = 50;
 	this->HP_Limit = 50;
-	this->troopNum = -1;
-	this->troopMemberNum = -1;
 	this->attackPower = 30;
 	this->defensePower = 45;
 	this->staminaRecoverAbility = 10;//毎ターン回復するスタミナ
