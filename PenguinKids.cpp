@@ -36,6 +36,7 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 int PenguinKids::selectAction(GameManager* gameBuf) {
 	int actFlag = 0;
 	actFlag = attack(gameBuf);
+	//deliverItem(gameBuf);
 	return actFlag;
 }
 
@@ -46,7 +47,7 @@ int PenguinKids::attack(GameManager* gameBuf) {
 	cy = y + directionY;
 	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
 		if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
-			if (gameBuf->board.at(cx).at(cy).creature->team != team) {//見方でなければ殴打。
+			if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
 
 				gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
 				if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
@@ -59,7 +60,6 @@ int PenguinKids::attack(GameManager* gameBuf) {
 			}
 		}
 	}
-
 	return 0;
 }
 

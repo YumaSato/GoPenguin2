@@ -80,7 +80,6 @@ int Emperor::selectAction(GameManager* gameBuf) {
 		}
 		return 1;
 	}
-
 	return 0;
 }
 

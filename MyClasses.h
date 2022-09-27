@@ -34,6 +34,8 @@ private:
 	Direction compass;
 
 public:
+
+
 	string name;
 	Team team;//ペンギン不在:0、赤ペンギン:1、青ペンギン:2
 	Status status;//卵:1、大人:2、老人:3、皇帝:4
