@@ -142,9 +142,18 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 
 		if (rutine == 2) {
 			if (mobCount >= 0 && mobCount < mobNum) {
-				if (ActMobs(gameBuf) == 1) {//行動したモブがいたら
+				
+				int actFlag = 0;
+				actFlag = kids[mobCount].selectAction();
+				mobCount++;
+				if (actFlag == 1) {
 					goNextFlag = 1;
 				}
+
+				//actFlag = ActMobs(gameBuf);//モブカウントの増加はこの関数の中で行われている。
+				//if (actFlag = 1) {//行動したモブがいたら
+				//	
+				//}
 			}
 			else {//mob達全員が行動を完了したら
 				turnNum++;
@@ -218,17 +227,19 @@ int GameManager::ActMobs(GameManager* gameBuf) {
 	if (mobCount >= 0 && mobCount < mobNum) {//モブカウントがモブの数より小さい間
 		int mobAct = 0;
 		mobAct = mobsSpeedOrder[mobCount]->selectAction();
+		mobCount++;
 		if (mobAct == 0) {//行動が発生しなかった場合
-			mobCount++;
-			if (mobCount >= 0 && mobCount < mobNum) {
-				return ActMobs(gameBuf);//最終的に行動するモブがいたら、1が返され続けて最後1が返る。
-			}
+			return 0;
+			//if (mobCount >= 0 && mobCount < mobNum) {
+			//	return ActMobs(gameBuf);//最終的に行動するモブがいたら、1が返され続けて最後1が返る。
+			//}
 		}
 		if (mobAct == 1) {//行動が発生してそれを表示しGoNextで待機する必要がある場合
 			camera->actingX = mobsSpeedOrder[mobCount]->x;
 			camera->actingY = mobsSpeedOrder[mobCount]->y;
-			mobCount++;
+			goNextFlag = 1;
 			return 1;
+
 		}
 	}
 	return 0;

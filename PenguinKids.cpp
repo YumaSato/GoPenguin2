@@ -26,6 +26,8 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 		name = "青クローン";
 	}
 	SETdirection(DirectionX, DirectionY);
+	x = ix;
+	y = iy;
 	speed = parentSpeed;
 	HP_Limit = 50;
 	HP = 50;
@@ -33,6 +35,7 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 	attackPower = 30;
 	num = gameBuf->mobNum;
 	fishingTurn = 0;
+	stamina = 10;
 	
 	return 0;
 }
@@ -40,30 +43,31 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 int PenguinKids::selectAction() {
 	int actFlag = 0;
 	actFlag = attack();
-	//deliverItem(gameBuf);
+	//deliverItem();
 	return actFlag;
 }
 
 int PenguinKids::attack() {
+
 	int cx = 0;
 	int cy = 0;
 	cx = x + directionX;
 	cy = y + directionY;
 	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
 
-		//if (gameBuf->board.at(cx).at(cy).creature != NULL) {
-		//	if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
+		if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+			if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
 
-		//		gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
-		//		if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
-		//			gameBuf->board.at(cx).at(cy).creature->HP = 0;
-		//			gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
-		//			gameBuf->board.at(cx).at(cy).creature = NULL;
-		//		}
-		//		gameBuf->camera->actionMsg = name + "は攻撃した！";
-		//		return 1;
-		//	}
-		//}
+				gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
+				if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
+					gameBuf->board.at(cx).at(cy).creature->HP = 0;
+					gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
+					gameBuf->board.at(cx).at(cy).creature = nullptr;
+				}
+				gameBuf->camera->actionMsg = name + "は攻撃した！";
+				return 1;
+			}
+		}
 	}
 	return 0;
 }

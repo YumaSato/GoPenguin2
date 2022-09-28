@@ -20,8 +20,9 @@ Creature::Creature() {//コンストラクタ。チームと位置を受け取る。
 	memset(&this->defensePower, NULL, sizeof(this->defensePower));
 	memset(&this->speed, NULL, sizeof(this->speed));
 	memset(&this->staminaRecoverAbility, NULL, sizeof(this->staminaRecoverAbility));
-	memset(&this->num, NULL, sizeof(this->num));
+	//memset(&this->num, NULL, sizeof(this->num));
 
+	num = -1;
 	item = nullptr;
 	name = "Somebody";
 	giveExpPoint = 0;
