@@ -34,7 +34,7 @@ private:
 	Direction compass;
 
 public:
-
+	GameManager* gameBuf;
 
 	string name;
 	Team team;//ペンギン不在:0、赤ペンギン:1、青ペンギン:2
@@ -64,20 +64,20 @@ public:
 	Creature();
 	~Creature();
 
-	int selectAction(GameManager* gameBuf);
-	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf);
-	int walk(GameManager* gameBuf);
-	int changeDirection(GameManager* gameBuf);
-	int attack(GameManager* gameBuf);
-	int setKids(GameManager* gameBuf);
-	int castKids(GameManager* gameBuf);
-	int useItem(GameManager* gameBuf);
-	int castItem(GameManager* gameBuf);
-	int requestItem(int itemNum, int x, int y, GameManager* gameBuf);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
-	int deliverItem(GameManager* gameBuf);//
-	int fishingItem(GameManager* gameBuf);
+	int selectAction();
+	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed);
+	int walk();
+	int changeDirection();
+	int attack();
+	int setKids();
+	int castKids();
+	int useItem();
+	int castItem();
+	int requestItem(int itemNum, int x, int y);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	int deliverItem();//
+	int fishingItem();
 
-	int killed(GameManager* gameBuf);
+	int killed();
 
 	void SETdirection(int xward, int yward);
 	void SETdirection(Direction compass);
@@ -96,17 +96,17 @@ private:
 public:
 
 	//PenguinKids* adjacent[4];
-
 	PenguinKids();
+	PenguinKids(GameManager* battle);
 	~PenguinKids();
 
-	int selectAction(GameManager* gameBuf);
-	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf);
-	int attack(GameManager* gameBuf);
+	int selectAction();
+	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed);
+	int attack();
 	
-	int requestItem(int itemNum, int x, int y, GameManager* gameBuf);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
-	int deliverItem(GameManager* gameBuf);//
-	int fishingItem(GameManager* gameBuf);
+	int requestItem(int itemNum, int x, int y);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	int deliverItem();//
+	int fishingItem();
 	
 	/*int changeDirection();
 	int attack();
@@ -117,18 +117,19 @@ public:
 class Emperor : public Creature {//マス目にいるキャラクター
 public:
 	Emperor();
+	Emperor(GameManager* battle);
 	~Emperor();
 
-	int selectAction(GameManager* gameBuf);
-	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf);
+	int selectAction();
+	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed);
 	
-	int walk(GameManager* gameBuf);
-	int changeDirection(GameManager* gameBuf);
-	int attack(GameManager* gameBuf);
-	int setKids(GameManager* gameBuf);
-	int castKids(GameManager* gameBuf);
-	int useItem(GameManager* gameBuf);
-	int castItem(GameManager* gameBuf);
+	int walk();
+	int changeDirection();
+	int attack();
+	int setKids();
+	int castKids();
+	int useItem();
+	int castItem();
 
 
 };
@@ -183,6 +184,8 @@ public:
 class Camera {
 public:
 
+	GameManager* gameBuf;
+
 	int exhibitX;//表示基準点
 	int exhibitY;
 	string actionMsg;
@@ -203,15 +206,15 @@ public:
 	int deliverCount;
 
 
-	Camera();
+	Camera(GameManager* battle);
 	~Camera();
 
-	int moveCamera(int markX, int markY, int attentionFlag, GameManager* gameBuf);
-	void exhibitScreen(int markX, int markY, int attentionFlag, GameManager* gameBuf);
+	int moveCamera(int markX, int markY, int attentionFlag);
+	void exhibitScreen(int markX, int markY, int attentionFlag);
 
-	/*void exhibitDamage(int markX, int markY, int attentionFlag, GameManager* gameBuf);
-	void exhibitCast(int markX, int markY, int attentionFlag, GameManager* gameBuf);
-	void exhibitDeliver(GameManager* gameBuf);*/
+	/*void exhibitDamage(int markX, int markY, int attentionFlag);
+	void exhibitCast(int markX, int markY, int attentionFlag);
+	void exhibitDeliver();*/
 
 	void exhiHP(int exhiX, int exhiY, Creature* cre);
 	void exhibitStatusMsg(Emperor* handledCharacters);

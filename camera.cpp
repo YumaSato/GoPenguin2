@@ -7,7 +7,9 @@ using std::to_string;
 
 
 
-Camera::Camera() {//カメラのコンストラクタ
+Camera::Camera(GameManager* battle) {//カメラのコンストラクタ
+
+	gameBuf = battle;
 	exhibitX = 0;//表示マス位置の左上の端の基準点
 	exhibitY = 0;
 
@@ -27,7 +29,7 @@ Camera::Camera() {//カメラのコンストラクタ
 Camera::~Camera() {//カメラのコンストラクタ
 }
 
-int Camera::moveCamera(int markX, int markY, int attentionFlag, GameManager* gameBuf) {
+int Camera::moveCamera(int markX, int markY, int attentionFlag) {
 
 		int moveSpeed = 6;
 		if (CheckHitKey(KEY_INPUT_RSHIFT) == TRUE || CheckHitKey(KEY_INPUT_LSHIFT) == TRUE) {
@@ -134,7 +136,7 @@ void Camera::exhiHP(int exhiX, int exhiY, Creature* cre) {//ダメージ受けてるキャ
 
 
 
-void Camera::exhibitScreen(int markX, int markY, int attentionFlag, GameManager* gameBuf) {//ペンギンを描画（ステータスと向きからペンギンの適切な画像のハンドルを入手し格納してから描画）
+void Camera::exhibitScreen(int markX, int markY, int attentionFlag) {//ペンギンを描画（ステータスと向きからペンギンの適切な画像のハンドルを入手し格納してから描画）
 	int h;//ハンドル格納用
 	string turn = "";
 	bool HPexhibitOrNot;

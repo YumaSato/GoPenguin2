@@ -10,10 +10,14 @@
 PenguinKids::PenguinKids() {//皇帝のコンストラクタ
 }
 
+PenguinKids::PenguinKids(GameManager* battle) {//皇帝のコンストラクタ
+	gameBuf = battle;
+}
+
 PenguinKids::~PenguinKids() {
 }
 
-int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf) {
+int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed) {
 	team = ParentTeam;
 	if (team == red) {
 		name = "赤クローン";
@@ -33,47 +37,48 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 	return 0;
 }
 
-int PenguinKids::selectAction(GameManager* gameBuf) {
+int PenguinKids::selectAction() {
 	int actFlag = 0;
-	actFlag = attack(gameBuf);
+	actFlag = attack();
 	//deliverItem(gameBuf);
 	return actFlag;
 }
 
-int PenguinKids::attack(GameManager* gameBuf) {
+int PenguinKids::attack() {
 	int cx = 0;
 	int cy = 0;
 	cx = x + directionX;
 	cy = y + directionY;
 	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
-		if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
-			if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
 
-				gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
-				if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
-					gameBuf->board.at(cx).at(cy).creature->HP = 0;
-					gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
-					gameBuf->board.at(cx).at(cy).creature = nullptr;
-				}
-				gameBuf->camera->actionMsg = name + "は攻撃した！";
-				return 1;
-			}
-		}
+		//if (gameBuf->board.at(cx).at(cy).creature != NULL) {
+		//	if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
+
+		//		gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
+		//		if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
+		//			gameBuf->board.at(cx).at(cy).creature->HP = 0;
+		//			gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
+		//			gameBuf->board.at(cx).at(cy).creature = NULL;
+		//		}
+		//		gameBuf->camera->actionMsg = name + "は攻撃した！";
+		//		return 1;
+		//	}
+		//}
 	}
 	return 0;
 }
 
 
 
-int PenguinKids::requestItem(int itemNum, int x, int y, GameManager* gameBuf) {
+int PenguinKids::requestItem(int itemNum, int x, int y) {
 	return 0;
 };
 
-int PenguinKids::deliverItem(GameManager* gameBuf) {
+int PenguinKids::deliverItem() {
 	return 0;
 };
 
-int PenguinKids::fishingItem(GameManager* gameBuf) {
+int PenguinKids::fishingItem() {
 	fishingTurn += GetRand(2) + 1;
 	if (fishingTurn >= 3) {
 		

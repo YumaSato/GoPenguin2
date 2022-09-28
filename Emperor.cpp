@@ -7,8 +7,12 @@
 //プロトタイプ宣言
 //void exhibitScreen(/*Grid board[FIELDSIZE][FIELDSIZE]*/);
 
-Emperor::Emperor() {//皇帝のコンストラクタ
+Emperor::Emperor() {
+	
+}
 
+Emperor::Emperor(GameManager* battle) {//皇帝のコンストラクタ
+	gameBuf = battle;
 }
 
 Emperor::~Emperor() {
@@ -16,7 +20,7 @@ Emperor::~Emperor() {
 }
 
 
-int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf) {
+int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed) {
 	status = EMPEROR;//ステータスを「皇帝」を意味する4に変更
 	team = ParentTeam;
 
@@ -48,7 +52,7 @@ int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int i
 }
 
 
-int Emperor::selectAction(GameManager* gameBuf) {
+int Emperor::selectAction() {
 
 	bool finishFlag = false;
 
@@ -56,20 +60,20 @@ int Emperor::selectAction(GameManager* gameBuf) {
 	
 	gameBuf->camera->actionMsg = "left0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]);
 
-	changeDirection(gameBuf);
+	changeDirection();
 
 	if ( stamina > 0 ) {
-		walk(gameBuf);
+		walk();
 	}
 
 	if (numKey[1][1] == 1) {
-		finishFlag = setKids(gameBuf);
+		finishFlag = setKids();
 	}
 	if (numKey[2][1] == 1) {
-		finishFlag = castKids(gameBuf);
+		finishFlag = castKids();
 	}
 	if (numKey[3][1] == 1) {
-		finishFlag = attack(gameBuf);
+		finishFlag = attack();
 	}
 
 
@@ -84,10 +88,10 @@ int Emperor::selectAction(GameManager* gameBuf) {
 }
 
 
-int Emperor::walk(GameManager* gameBuf) {
+int Emperor::walk() {
 	if (shiftKey[0] == 0) {
 		//gameBuf->camera->mainMsg = "歩行十字キー待機";
-		if (changeDirection(gameBuf) == 1) {//方向ボタンが押されたら
+		if (changeDirection() == 1) {//方向ボタンが押されたら
 			int cx = x;
 			int cy = y;
 			int dx = 0;
@@ -115,7 +119,7 @@ int Emperor::walk(GameManager* gameBuf) {
 // || (rightKey[0] == 1 && downKey[0] == 1)
 // || (leftKey[0] == 1 && downKey[0] == 1)
 
-int Emperor::changeDirection(GameManager* gameBuf) {
+int Emperor::changeDirection() {
 	//bool diagonal = false;
 
 	if (CheckHitKey(KEY_INPUT_Z) == 1) {
@@ -241,7 +245,7 @@ int Emperor::changeDirection(GameManager* gameBuf) {
 }
 
 
-int Emperor::attack(GameManager* gameBuf) {
+int Emperor::attack() {
 	int cx = 0;
 	int cy = 0;
 	cx = x + directionX;
@@ -267,7 +271,7 @@ int Emperor::attack(GameManager* gameBuf) {
 	return 0;
 }
 
-int Emperor::setKids(GameManager* gameBuf) {
+int Emperor::setKids() {
 	int cx = 0;
 	int cy = 0;
 	cx = x + directionX;
@@ -277,10 +281,10 @@ int Emperor::setKids(GameManager* gameBuf) {
 
 			//PenguinKids kid = PenguinKids();
 			
-			shared_ptr <PenguinKids> kid = make_shared<PenguinKids>(PenguinKids());
+			//shared_ptr <PenguinKids> kid = make_shared<PenguinKids>(PenguinKids());
 
-			gameBuf->kids[gameBuf->mobNum] = *kid;
-			gameBuf->kids[gameBuf->mobNum].setCharacter(team, directionX, directionY, cx, cy, speed, gameBuf);
+			//gameBuf->kids[gameBuf->mobNum] = *kid;
+			gameBuf->kids[gameBuf->mobNum].setCharacter(team, directionX, directionY, cx, cy, speed);
 			gameBuf->board.at(cx).at(cy).creature = &gameBuf->kids[gameBuf->mobNum];
 			gameBuf->mobNum++;
 
@@ -290,14 +294,14 @@ int Emperor::setKids(GameManager* gameBuf) {
 	return 0;
 }
 
-int Emperor::castKids(GameManager* gameBuf) {
+int Emperor::castKids() {
 	return 0;
 }
 
-int Emperor::useItem(GameManager* gameBuf) {
+int Emperor::useItem() {
 	return 0;
 }
 
-int Emperor::castItem(GameManager* gameBuf) {
+int Emperor::castItem() {
 	return 0;
 }

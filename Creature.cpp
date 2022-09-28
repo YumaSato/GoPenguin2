@@ -49,57 +49,57 @@ Creature::~Creature() {
 }
 
 
-int Creature::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed, GameManager* gameBuf) {
+int Creature::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed) {
 	return 0;
 }
 
-int Creature::selectAction(GameManager* gameBuf) {
+int Creature::selectAction() {
 	return 0;
 }
 
-int Creature::walk(GameManager* gameBuf) {
+int Creature::walk() {
 	return 0;
 }
 
 
-int Creature::changeDirection(GameManager* gameBuf) {
+int Creature::changeDirection() {
 	return 0;
 }
 
-int Creature::attack(GameManager* gameBuf) {
+int Creature::attack() {
 	return 0;
 }
 
-int Creature::setKids(GameManager* gameBuf) {
+int Creature::setKids() {
 	return 0;
 }
 
-int Creature::castKids(GameManager* gameBuf) {
+int Creature::castKids() {
 	return 0;
 }
 
-int Creature::useItem(GameManager* gameBuf) {
+int Creature::useItem() {
 	return 0;
 };
 
-int Creature::castItem(GameManager* gameBuf) {
+int Creature::castItem() {
 	return 0;
 };
 
-int Creature::requestItem(int itemNum, int x, int y, GameManager* gameBuf) {
+int Creature::requestItem(int itemNum, int x, int y) {
 	return 0;
 };
 
-int Creature::deliverItem(GameManager* gameBuf) {
+int Creature::deliverItem() {
 	return 0;
 };
-int Creature::fishingItem(GameManager* gameBuf) {
+int Creature::fishingItem() {
 	return 0;
 }
 
 
 
-int Creature::killed(GameManager* gameBuf) {//指定地点に生物がいる前提。攻撃の内容を実行。
+int Creature::killed() {//指定地点に生物がいる前提。攻撃の内容を実行。
 	
 	return 0;
 }

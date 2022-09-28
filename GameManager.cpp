@@ -29,7 +29,7 @@ GameManager::GameManager(int stageLevel, int xSize, int ySize) {//コンストラクタ
 	this->sizeX = xSize;
 	this->sizeY = ySize;
 
-	camera = new Camera();
+	camera = new Camera(this);
 
 
 
@@ -44,6 +44,8 @@ GameManager::GameManager(int stageLevel, int xSize, int ySize) {//コンストラクタ
 		}
 		board.push_back(xVec);
 	}
+
+	
 
 
 	
@@ -62,14 +64,21 @@ GameManager::GameManager(int stageLevel, int xSize, int ySize) {//コンストラクタ
 
 		}
 	}
-	shared_ptr <Emperor> Emperor1 = make_shared<Emperor>(Emperor());//インスタンス化
-	Emperor1->setCharacter(red, 1, 0, 5, 5, 1001, this);
+
+	for (int i = 0; i < 1024; i++) {
+		shared_ptr <PenguinKids> kid = make_shared<PenguinKids>(PenguinKids(this));
+		kids[i] = *kid;
+	}
+
+
+	shared_ptr <Emperor> Emperor1 = make_shared<Emperor>(Emperor(this));//インスタンス化
+	Emperor1->setCharacter(red, 1, 0, 5, 5, 1001);
 	handledCharacters[0] = *Emperor1;
 	board[Emperor1->x][Emperor1->y].creature = &handledCharacters[0];//マス目に自分のポインタを代入。
 
-	shared_ptr <Emperor> Emperor2 = make_shared<Emperor>(Emperor());
+	shared_ptr <Emperor> Emperor2 = make_shared<Emperor>(Emperor(this));
 	//Emperor* Emperor2 = new Emperor();//インスタンス化
-	Emperor2->setCharacter(blue, 0, 1, 7, 10, 1000, this);
+	Emperor2->setCharacter(blue, 0, 1, 7, 10, 1000);
 	handledCharacters[1] = *Emperor2;
 	board[Emperor2->x][Emperor2->y].creature = &handledCharacters[1];
 
@@ -120,7 +129,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 				if (handledCharacters[moveCount].HP > 0) {
 					camera->actingX = handledCharacters[moveCount].x;
 					camera->actingY = handledCharacters[moveCount].y;
-					if (handledCharacters[moveCount].selectAction(gameBuf) == 1) {//行動終了である1が帰ってきたら次キャラへ
+					if (handledCharacters[moveCount].selectAction() == 1) {//行動終了である1が帰ってきたら次キャラへ
 						moveCount++;
 					};
 				}
@@ -151,7 +160,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 		}
 		
 
-		camera->moveCamera(0, 0, FALSE, gameBuf);
+		camera->moveCamera(0, 0, FALSE);
 
 		
 		
@@ -173,7 +182,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 		return 0;
 	}
 
-	camera->exhibitScreen(0, 0, FALSE, gameBuf);
+	camera->exhibitScreen(0, 0, FALSE);
 
 	return 0;
 }
@@ -208,7 +217,7 @@ int GameManager::GameClear(GameManager* gameBuf) {
 int GameManager::ActMobs(GameManager* gameBuf) {
 	if (mobCount >= 0 && mobCount < mobNum) {//モブカウントがモブの数より小さい間
 		int mobAct = 0;
-		mobAct = mobsSpeedOrder[mobCount]->selectAction(gameBuf);
+		mobAct = mobsSpeedOrder[mobCount]->selectAction();
 		if (mobAct == 0) {//行動が発生しなかった場合
 			mobCount++;
 			if (mobCount >= 0 && mobCount < mobNum) {
