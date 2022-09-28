@@ -110,81 +110,95 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 			GoNext(gameBuf);
 			return 0;
 		}
+		else {
 
 
 
-		if (rutine == 0) {
-			for (int i = 0; i < mobNum; i++) {//いったん代入する。
-				if (kids[i].num <= 0) {//numがマイナス、つまり死後のキャラを除く。
-					mobsSpeedOrder.push_back(&kids[i]);
+
+
+
+
+
+			if (rutine == 0) {
+				if (moveCount >= 0 && moveCount < moveCharaNumber) {//エンペラーの数だけ実行
+					if (handledCharacters[moveCount].HP > 0) {
+						camera->actingX = handledCharacters[moveCount].x;
+						camera->actingY = handledCharacters[moveCount].y;
+						if (handledCharacters[moveCount].selectAction() == 1) {//行動終了である1が帰ってきたら次キャラへ
+							moveCount++;
+						};
+					}
+				}
+				else {//エンペラーの数の分だけ繰り返したら,次からはrutine2のフェーズの各モブを動かしていく。
+					moveCount = 0;
+					rutine = 1;
 				}
 			}
-			sort(mobsSpeedOrder.begin(), mobsSpeedOrder.end(), speedOrder);//mobの素早さ配列を完成させる。
-			rutine = 1;
-		}
 
-
-		if (rutine == 1) {
-			if (moveCount >= 0 && moveCount < moveCharaNumber) {//エンペラーの数だけ実行
-				if (handledCharacters[moveCount].HP > 0) {
-					camera->actingX = handledCharacters[moveCount].x;
-					camera->actingY = handledCharacters[moveCount].y;
-					if (handledCharacters[moveCount].selectAction() == 1) {//行動終了である1が帰ってきたら次キャラへ
-						moveCount++;
-					};
+			if (rutine == 1) {
+				for (int i = 0; i < mobNum; i++) {//いったん代入する。
+					if (kids[i].num >= 0) {//numがマイナス、つまり死後のキャラを除く。
+						mobsSpeedOrder.push_back(&kids[i]);
+					}
 				}
-			}
-			else {//エンペラーの数の分だけ繰り返したら,次からはrutine2のフェーズの各モブを動かしていく。
-				moveCount = 0;
+				sort(mobsSpeedOrder.begin(), mobsSpeedOrder.end(), speedOrder);//mobの素早さ配列を完成させる。
 				rutine = 2;
 			}
-		}
 
-		if (rutine == 2) {
-			if (mobCount >= 0 && mobCount < mobNum) {
-				
-				int actFlag = 0;
-				actFlag = kids[mobCount].selectAction();
-				mobCount++;
-				if (actFlag == 1) {
-					goNextFlag = 1;
+			if (rutine == 2) {
+				if (mobCount >= 0 && mobCount < mobsSpeedOrder.size()) {
+
+					int actFlag = 0;
+
+
+					//while (true) {
+						actFlag = mobsSpeedOrder.at(mobCount)->selectAction();
+						mobCount++;
+						if (actFlag == 1) {
+							goNextFlag = 1;
+							//break;
+						}
+						if (mobCount == mobsSpeedOrder.size()) {
+							//break;
+						}
+					//}
+
+					//actFlag = ActMobs(gameBuf);//モブカウントの増加はこの関数の中で行われている。
+					//if (actFlag = 1) {//行動したモブがいたら
+					//	
+					//}
 				}
+				else {//mob達全員が行動を完了したら
+					turnNum++;
+					mobCount = 0;
+					rutine = 3;
+					camera->actionMsg = "次のターン(" + std::to_string(turnNum) + ")へ進みます。";
+				}
+			}
+			if (rutine == 3) {
+				if (GoNext(gameBuf) == 0) {
+					rutine = 0;
+				}
+			}
 
-				//actFlag = ActMobs(gameBuf);//モブカウントの増加はこの関数の中で行われている。
-				//if (actFlag = 1) {//行動したモブがいたら
-				//	
-				//}
-			}
-			else {//mob達全員が行動を完了したら
-				turnNum++;
-				mobCount = 0;
-				rutine = 3;
-				camera->actionMsg = "次のターン(" + std::to_string(turnNum) + ")へ進みます。";
-			}
+
+			camera->moveCamera(0, 0, FALSE);
+
+
+
+
+
+			//if (rutine == 3) {
+			//	GrowCrop();
+			//	rutine = 4;
+			//}
+
+			//if (rutine == 4){
+			//	if (GoNext(0, 0, FALSE == TRUE)) {
+			//		moveCount = 4;//植物が成長して、それを確認するGoNextがTrueになってから
+			//	}
+			//}
 		}
-		if (rutine == 3) {
-			if (GoNext(gameBuf) == 0) {
-				rutine = 0;
-			}
-		}
-		
-
-		camera->moveCamera(0, 0, FALSE);
-
-		
-		
-
-
-		//if (rutine == 3) {
-		//	GrowCrop();
-		//	rutine = 4;
-		//}
-
-		//if (rutine == 4){
-		//	if (GoNext(0, 0, FALSE == TRUE)) {
-		//		moveCount = 4;//植物が成長して、それを確認するGoNextがTrueになってから
-		//	}
-		//}
 	}
 
 	if (gameMode == 2) {//勝利判定とエンディング
@@ -223,27 +237,27 @@ int GameManager::GameClear(GameManager* gameBuf) {
 
 
 
-int GameManager::ActMobs(GameManager* gameBuf) {
-	if (mobCount >= 0 && mobCount < mobNum) {//モブカウントがモブの数より小さい間
-		int mobAct = 0;
-		mobAct = mobsSpeedOrder[mobCount]->selectAction();
-		mobCount++;
-		if (mobAct == 0) {//行動が発生しなかった場合
-			return 0;
-			//if (mobCount >= 0 && mobCount < mobNum) {
-			//	return ActMobs(gameBuf);//最終的に行動するモブがいたら、1が返され続けて最後1が返る。
-			//}
-		}
-		if (mobAct == 1) {//行動が発生してそれを表示しGoNextで待機する必要がある場合
-			camera->actingX = mobsSpeedOrder[mobCount]->x;
-			camera->actingY = mobsSpeedOrder[mobCount]->y;
-			goNextFlag = 1;
-			return 1;
-
-		}
-	}
-	return 0;
-}
+//int GameManager::ActMobs(GameManager* gameBuf) {原因不明の例外が発生する悪魔の関数
+//	if (mobCount >= 0 && mobCount < mobNum) {//モブカウントがモブの数より小さい間
+//		int mobAct = 0;
+//		mobAct = mobsSpeedOrder[mobCount]->selectAction();
+//		mobCount++;
+//		if (mobAct == 0) {//行動が発生しなかった場合
+//			return 0;
+//			if (mobCount >= 0 && mobCount < mobNum) {
+//				return ActMobs(gameBuf);//最終的に行動するモブがいたら、1が返され続けて最後1が返る。
+//			}
+//		}
+//		if (mobAct == 1) {//行動が発生してそれを表示しGoNextで待機する必要がある場合
+//			camera->actingX = mobsSpeedOrder[mobCount]->x;
+//			camera->actingY = mobsSpeedOrder[mobCount]->y;
+//			goNextFlag = 1;
+//			return 1;
+//
+//		}
+//	}
+//	return 0;
+//}
 
 int GameManager::FinishGame(GameManager* gameBuf) {
 	return 0;

@@ -51,25 +51,57 @@ int PenguinKids::attack() {
 
 	int cx = 0;
 	int cy = 0;
-	cx = x + directionX;
-	cy = y + directionY;
-	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
+	int dx = 0;
+	int dy = 0;
+	int directRandom = 0;
+	int diCheck[4] = {0,1,2,3};
 
-		if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
-			if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
-
-				gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
-				if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
-					gameBuf->board.at(cx).at(cy).creature->HP = 0;
-					gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
-					gameBuf->board.at(cx).at(cy).creature = nullptr;
-				}
-				gameBuf->camera->actionMsg = name + "は攻撃した！";
-				return 1;
-			}
+	for (int i = 0; i < 4; i++) {
+		int reorganize = GetRand(7-i)+i;
+		int exchange = diCheck[i];
+		diCheck[i] = diCheck[reorganize];
+		diCheck[reorganize] = exchange;
+	}
+	for (int i = 0; i < 4; i++) {
+		if (i == 0) {
+			dx = 1;
+			dy = 0;
 		}
+		if (i == 1) {
+			dx = -1;
+			dy = 0;
+		}
+		if (i == 2) {
+			dx = 0;
+			dy = 1;
+		}
+		if (i == 3) {
+			dx = 0;
+			dy = -1;
+		}
+
+		cx = x + dx;
+		cy = y + dy;
+		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
+
+			if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+				if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
+
+					gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
+					if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
+						gameBuf->board.at(cx).at(cy).creature->HP = 0;
+						gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
+						gameBuf->board.at(cx).at(cy).creature = nullptr;
+					}
+					gameBuf->camera->actionMsg = std::to_string(num) +"番の" + name + " X:" + std::to_string(x) + " Y:" + std::to_string(y) + "は攻撃した！";
+					SETdirection(dx, dy);
+					return 1;
+				}
+			}
+		}	
 	}
 	return 0;
+	
 }
 
 
