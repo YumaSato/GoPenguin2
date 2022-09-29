@@ -56,6 +56,9 @@ int Emperor::selectAction() {
 
 	bool finishFlag = false;
 
+	gameBuf->camera->markX = x;
+	gameBuf->camera->markY = y;
+
 	gameBuf->camera->actionMsg = name + "‚Í‰½‚ð‚·‚éH";
 	
 	gameBuf->camera->actionMsg = "left0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]);

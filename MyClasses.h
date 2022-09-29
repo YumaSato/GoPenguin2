@@ -199,8 +199,11 @@ public:
 	int handle[3][9][8];
 	int handleField[64];
 	int handleBack[32];*/
-	int actingX;
-	int actingY;
+
+	int markX;
+	int markY;
+	bool markFlag;//íçñ⁄É}ÉXï\é¶ÇÇ∑ÇÈÇ©î€Ç©
+
 	int damageCount;
 	int castCount;
 	int deliverCount;
@@ -210,7 +213,7 @@ public:
 	~Camera();
 
 	int moveCamera(int markX, int markY, int attentionFlag);
-	void exhibitScreen(int markX, int markY, int attentionFlag);
+	void exhibitScreen();
 
 	/*void exhibitDamage(int markX, int markY, int attentionFlag);
 	void exhibitCast(int markX, int markY, int attentionFlag);

@@ -116,8 +116,9 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 			if (rutine == 0) {
 				if (moveCount >= 0 && moveCount < moveCharaNumber) {//エンペラーの数だけ実行
 					if (handledCharacters[moveCount].HP > 0) {
-						camera->actingX = handledCharacters[moveCount].x;
-						camera->actingY = handledCharacters[moveCount].y;
+						camera->markX = handledCharacters[moveCount].x;
+						camera->markY = handledCharacters[moveCount].y;
+						camera->markFlag = true;
 						if (handledCharacters[moveCount].selectAction() == 1) {//行動終了である1が帰ってきたら次キャラへ
 							moveCount++;
 						};
@@ -142,7 +143,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 				rutine = 2;
 			}
 
-			if (rutine == 2) {
+			else if (rutine == 2) {
 				if (mobCount >= 0 && mobCount < mobsSpeedOrder.size()) {
 
 					int actFlag = 0;
@@ -152,11 +153,16 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 						if(mobsSpeedOrder.at(mobCount)->num >= 0){//mobsSpeedOrderを生み出した後に子ペンギンによる攻撃で死んでいる場合はスルー
 							actFlag = mobsSpeedOrder.at(mobCount)->selectAction();
 						}
-						mobCount++;
+						
 						if (actFlag == 1) {
+							camera->markFlag = true;
+							camera->markX = mobsSpeedOrder.at(mobCount)->x;
+							camera->markY = mobsSpeedOrder.at(mobCount)->y;
 							goNextFlag = 1;
 							//break;
 						}
+						mobCount++;
+
 						if (mobCount == mobsSpeedOrder.size()) {
 							//break;
 						}
@@ -178,6 +184,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 				}
 			}
 			if (rutine == 3) {
+				camera->markFlag = false;
 				if (GoNext(gameBuf) == 0) {
 					rutine = 0;
 				}
@@ -207,7 +214,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 		return 0;
 	}
 
-	camera->exhibitScreen(0, 0, FALSE);
+	camera->exhibitScreen();
 
 	return 0;
 }

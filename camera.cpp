@@ -13,8 +13,10 @@ Camera::Camera(GameManager* battle) {//ƒJƒƒ‰‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	exhibitX = 0;//•\¦ƒ}ƒXˆÊ’u‚Ì¶ã‚Ì’[‚ÌŠî€“_
 	exhibitY = 0;
 
-	actingX = 0;//s“®’†‚ÌƒLƒƒƒ‰ƒNƒ^‚ÌˆÊ’u‚É’–ÚF•\¦‚ğo‚·‚½‚ß‚ÌÀ•WB
-	actingY = 0;
+	markX = 0;//s“®’†‚ÌƒLƒƒƒ‰ƒNƒ^‚ÌˆÊ’u‚É’–ÚF•\¦‚ğo‚·‚½‚ß‚ÌÀ•WB
+	markY = 0;
+	markFlag = false;
+
 	damageCount = 0;
 	castCount = 0;
 	deliverCount = 0;
@@ -136,7 +138,7 @@ void Camera::exhiHP(int exhiX, int exhiY, Creature* cre) {//ƒ_ƒ[ƒWó‚¯‚Ä‚éƒLƒƒ
 
 
 
-void Camera::exhibitScreen(int markX, int markY, int attentionFlag) {//ƒyƒ“ƒMƒ“‚ğ•`‰æiƒXƒe[ƒ^ƒX‚ÆŒü‚«‚©‚çƒyƒ“ƒMƒ“‚Ì“KØ‚È‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ğ“üè‚µŠi”[‚µ‚Ä‚©‚ç•`‰æj
+void Camera::exhibitScreen() {//ƒyƒ“ƒMƒ“‚ğ•`‰æiƒXƒe[ƒ^ƒX‚ÆŒü‚«‚©‚çƒyƒ“ƒMƒ“‚Ì“KØ‚È‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ğ“üè‚µŠi”[‚µ‚Ä‚©‚ç•`‰æj
 	int h;//ƒnƒ“ƒhƒ‹Ši”[—p
 	string turn = "";
 	bool HPexhibitOrNot;
@@ -181,7 +183,7 @@ void Camera::exhibitScreen(int markX, int markY, int attentionFlag) {//ƒyƒ“ƒMƒ“‚
 			}
 
 
-			if (attentionFlag == TRUE && markX == ix && markY == iy) {//’–Ú‘ÎÛƒLƒƒƒ‰‚Ìƒ}ƒX‚É’–Ú—p‚Ì‰~‚ğ•\¦‚·‚é‚©”Û‚©
+			if (markFlag == TRUE && markX == ix && markY == iy) {//’–Ú‘ÎÛƒLƒƒƒ‰‚Ìƒ}ƒX‚É’–Ú—p‚Ì‰~‚ğ•\¦‚·‚é‚©”Û‚©
 				DrawBox(-exhibitX + markX * 48 + 4, -exhibitY + markY * 48 + 4, -exhibitX + markX * 48 + 44, -exhibitY + markY * 48 + 44, GetColor(255, 200, 0), TRUE);
 			}
 

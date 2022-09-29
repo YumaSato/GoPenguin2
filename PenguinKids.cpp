@@ -41,6 +41,8 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 }
 
 int PenguinKids::selectAction() {
+	gameBuf->camera->markX = x;
+	gameBuf->camera->markY = y;
 	int actFlag = 0;
 	actFlag = attack();
 	//deliverItem();
