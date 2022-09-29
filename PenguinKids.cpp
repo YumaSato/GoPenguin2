@@ -44,7 +44,15 @@ int PenguinKids::selectAction() {
 	gameBuf->camera->markX = x;
 	gameBuf->camera->markY = y;
 	int actFlag = 0;
-	actFlag = attack();
+	
+	if (item == nullptr) {
+		actFlag = fishingItem();
+	}
+	if (actFlag == 0) {
+		actFlag = attack();
+	}
+	
+	
 	//deliverItem();
 
 	
@@ -128,17 +136,66 @@ int PenguinKids::deliverItem() {
 };
 
 int PenguinKids::fishingItem() {
-	fishingTurn += GetRand(2) + 1;
-	if (fishingTurn >= 3) {
-		
-		if (GetRand(5) % 5 == 0) {
-			item = make_shared<Fish2>(Fish2());
-		}
-		else {
-			item = make_shared<Fish1>(Fish1());
-		}
-		
-		fishingTurn = 0;
-		return 0;
+	int cx = 0;
+	int cy = 0;
+	int dx = 0;
+	int dy = 0;
+	int directRandom = 0;
+	int diCheck[4] = { 0,1,2,3 };
+
+	for (int i = 0; i < 4; i++) {
+		int reorganize = GetRand(3 - i) + i;
+		int exchange = diCheck[i];
+		diCheck[i] = diCheck[reorganize];
+		diCheck[reorganize] = exchange;
 	}
+	for (int i = 0; i < 4; i++) {
+		if (diCheck[i] == 0) {
+			dx = 1;
+			dy = 0;
+		}
+		if (diCheck[i] == 1) {
+			dx = -1;
+			dy = 0;
+		}
+		if (diCheck[i] == 2) {
+			dx = 0;
+			dy = 1;
+		}
+		if (diCheck[i] == 3) {
+			dx = 0;
+			dy = -1;
+		}
+
+		cx = x + dx;
+		cy = y + dy;
+		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
+			if (gameBuf->board.at(cx).at(cy).creature == nullptr) {
+
+				fishingTurn += GetRand(2) + 1;
+				if (fishingTurn >= 3) {
+
+					if (GetRand(5) % 5 == 0) {//レアな魚
+						item = make_shared<Fish1>(Fish1());
+						gameBuf->camera->actionMsg = item->name + "が釣れた！";
+					}
+					else {
+						item = make_shared<Fish1>(Fish1());
+						gameBuf->camera->actionMsg = item->name + "が釣れた！";
+					}
+
+					fishingTurn = 0;
+					
+				}
+				else {
+					gameBuf->camera->actionMsg = name + "は、釣りをしている。";
+				}
+				return 1;
+			}
+		}
+	}
+
+
+
+	return 0;
 };

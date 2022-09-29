@@ -158,7 +158,7 @@ public:
 
 class Item {//ƒAƒCƒeƒ€
 public:
-	int type;
+	int itemType;
 	string name;
 	int recoverPower;
 	int hurtPower;
@@ -192,6 +192,8 @@ public:
 	string mainMsg;
 	string statusMsg;
 	string counterMsg;
+
+	int handleItem[8];
 
 	/*int HandleBoard;
 	int hHP;

@@ -21,6 +21,15 @@ Camera::Camera(GameManager* battle) {//カメラのコンストラクタ
 	castCount = 0;
 	deliverCount = 0;
 
+	handleItem[0] = LoadGraph("Imgs/fish1.png");
+	handleItem[1] = LoadGraph("Imgs/fish1.png");
+	handleItem[2] = LoadGraph("Imgs/fish1.png");
+	handleItem[3] = LoadGraph("Imgs/fish1.png");
+	handleItem[4] = LoadGraph("Imgs/fish1.png");
+	handleItem[5] = LoadGraph("Imgs/fish1.png");
+	handleItem[6] = LoadGraph("Imgs/fish1.png");
+	handleItem[7] = LoadGraph("Imgs/fish1.png");
+
 	string actionMsg = "";
 	string mainMsg = "";
 	string statusMsg = "";
@@ -140,6 +149,7 @@ void Camera::exhiHP(int exhiX, int exhiY, Creature* cre) {//ダメージ受けてるキャ
 
 void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適切な画像のハンドルを入手し格納してから描画）
 	int h;//ハンドル格納用
+	int itemHandle = -1;
 	string turn = "";
 	bool HPexhibitOrNot;
 	ClearDrawScreen();//一度画面を全消し
@@ -194,7 +204,7 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 			if (gameBuf->board[ix][iy].creature == nullptr) {
 				continue;
 			}
-			else if(gameBuf->board[ix][iy].creature != nullptr) {
+			else if(gameBuf->board[ix][iy].creature != nullptr) {//何か生き物がいた場合
 
 				/*turn = "ix = " + std::to_string(ix);
 				WaitKey();*/
@@ -208,6 +218,11 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 				if (gameBuf->board[ix][iy].creature->HP < gameBuf->board[ix][iy].creature->HP_Limit) {
 					HPexhibitOrNot = TRUE;
 				}
+
+				
+				if (gameBuf->board[ix][iy].creature->item != nullptr) {//何かアイテムを持っていた場合
+						itemHandle = gameBuf->board[ix][iy].creature->item->itemType;
+				}
 			}
 
 			//LoadGraphScreen(0, 0, "back.png", TRUE);
@@ -216,11 +231,13 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 
 			if (HPexhibitOrNot == TRUE) {
 				exhiHP(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, gameBuf->board[ix][iy].creature);
-
-				/*DrawGraph(-exhibitX + ix * SQUARESIZE + 5, -exhibitY + iy * SQUARESIZE + 29, hHP, TRUE);
-				DrawBox(-exhibitX + ix * SQUARESIZE + 16, -exhibitY + iy * SQUARESIZE + 31, -exhibitX + ix * SQUARESIZE + 16 + gameBuf->board[ix][iy].creature->HP / 2, -exhibitY + iy * SQUARESIZE + 36, GetColor(45, 205, 50), TRUE);
-			*/
 			}
+			if (itemHandle >= 0 && itemHandle < 8) {//アイテムを持っていた場合。
+				DrawGraph(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, handleItem[itemHandle], TRUE);
+			}
+
+
+			
 
 		}
 	}
