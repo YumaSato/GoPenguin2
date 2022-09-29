@@ -44,6 +44,9 @@ int PenguinKids::selectAction() {
 	int actFlag = 0;
 	actFlag = attack();
 	//deliverItem();
+
+	
+
 	return actFlag;
 }
 
@@ -57,25 +60,25 @@ int PenguinKids::attack() {
 	int diCheck[4] = {0,1,2,3};
 
 	for (int i = 0; i < 4; i++) {
-		int reorganize = GetRand(7-i)+i;
+		int reorganize = GetRand(3-i)+i;
 		int exchange = diCheck[i];
 		diCheck[i] = diCheck[reorganize];
 		diCheck[reorganize] = exchange;
 	}
 	for (int i = 0; i < 4; i++) {
-		if (i == 0) {
+		if (diCheck[i] == 0) {
 			dx = 1;
 			dy = 0;
 		}
-		if (i == 1) {
+		if (diCheck[i] == 1) {
 			dx = -1;
 			dy = 0;
 		}
-		if (i == 2) {
+		if (diCheck[i] == 2) {
 			dx = 0;
 			dy = 1;
 		}
-		if (i == 3) {
+		if (diCheck[i] == 3) {
 			dx = 0;
 			dy = -1;
 		}
@@ -87,12 +90,20 @@ int PenguinKids::attack() {
 			if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
 				if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
 
-					gameBuf->board.at(cx).at(cy).creature->HP -= 8 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
+					gameBuf->board.at(cx).at(cy).creature->HP -= 5 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
+					/*if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
+						gameBuf->board.at(cx).at(cy).creature->HP = 0;
+					}*/
+					//if (HP <= 0) {
+					//	gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
+					//	gameBuf->board.at(cx).at(cy).creature = nullptr;
+					//}
 					if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
 						gameBuf->board.at(cx).at(cy).creature->HP = 0;
 						gameBuf->board.at(cx).at(cy).creature->num = -1;//numが-1なのは死んだキャラの証。
 						gameBuf->board.at(cx).at(cy).creature = nullptr;
 					}
+
 					gameBuf->camera->actionMsg = std::to_string(num) +"番の" + name + " X:" + std::to_string(x) + " Y:" + std::to_string(y) + "は攻撃した！";
 					SETdirection(dx, dy);
 					return 1;

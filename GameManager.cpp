@@ -113,12 +113,6 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 		else {
 
 
-
-
-
-
-
-
 			if (rutine == 0) {
 				if (moveCount >= 0 && moveCount < moveCharaNumber) {//エンペラーの数だけ実行
 					if (handledCharacters[moveCount].HP > 0) {
@@ -136,6 +130,9 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 			}
 
 			if (rutine == 1) {
+
+
+
 				for (int i = 0; i < mobNum; i++) {//いったん代入する。
 					if (kids[i].num >= 0) {//numがマイナス、つまり死後のキャラを除く。
 						mobsSpeedOrder.push_back(&kids[i]);
@@ -152,7 +149,9 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 
 
 					//while (true) {
-						actFlag = mobsSpeedOrder.at(mobCount)->selectAction();
+						if(mobsSpeedOrder.at(mobCount)->num >= 0){//mobsSpeedOrderを生み出した後に子ペンギンによる攻撃で死んでいる場合はスルー
+							actFlag = mobsSpeedOrder.at(mobCount)->selectAction();
+						}
 						mobCount++;
 						if (actFlag == 1) {
 							goNextFlag = 1;
@@ -169,6 +168,9 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 					//}
 				}
 				else {//mob達全員が行動を完了したら
+
+					mobsSpeedOrder.clear();
+
 					turnNum++;
 					mobCount = 0;
 					rutine = 3;
