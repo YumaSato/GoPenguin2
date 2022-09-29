@@ -169,6 +169,7 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 
 	for (int ix = exhibitX / 48; ix < exhibitXsize; ix++) {//exhibitXとYの基準点から順番に描画
 		for (int iy = exhibitY / 48; iy < exhibitYsize; iy++) {
+			itemHandle = -1;
 
 			
 			
@@ -213,7 +214,7 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 				directionNum = gameBuf->board[ix][iy].creature->GETdirection();
 
 				h = handle[gameBuf->board[ix][iy].creature->team][gameBuf->board[ix][iy].creature->status][directionNum];
-
+				DrawGraph(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, h, TRUE);//一度クラスの変数に格納したHandleで描画
 
 				if (gameBuf->board[ix][iy].creature->HP < gameBuf->board[ix][iy].creature->HP_Limit) {
 					HPexhibitOrNot = TRUE;
@@ -221,20 +222,20 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 
 				
 				if (gameBuf->board[ix][iy].creature->item != nullptr) {//何かアイテムを持っていた場合
-						itemHandle = gameBuf->board[ix][iy].creature->item->itemType;
+					itemHandle = gameBuf->board[ix][iy].creature->item->itemType;
+					DrawGraph(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, handleItem[itemHandle], TRUE);
+						
 				}
 			}
 
 			//LoadGraphScreen(0, 0, "back.png", TRUE);
-			DrawGraph(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, h, TRUE);//一度クラスの変数に格納したHandleで描画
+			
 			//DrawString(450, 20, msg.c_str(), WHITE);
 
 			if (HPexhibitOrNot == TRUE) {
 				exhiHP(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, gameBuf->board[ix][iy].creature);
 			}
-			if (itemHandle >= 0 && itemHandle < 8) {//アイテムを持っていた場合。
-				DrawGraph(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, handleItem[itemHandle], TRUE);
-			}
+			
 
 
 			
