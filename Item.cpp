@@ -21,7 +21,7 @@ Fish1::~Fish1() {
 
 
 Fish2::Fish2() {
-	itemType = 1;
+	itemType = 0;
 	name = "‚ ‚¶";
 	recoverPower = 35;
 	hurtPower = 1;

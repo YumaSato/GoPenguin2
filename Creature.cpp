@@ -87,7 +87,7 @@ int Creature::castItem() {
 	return 0;
 };
 
-int Creature::requestItem(int itemNum, int x, int y) {
+int Creature::requestItem(int type, int x, int y) {
 	return 0;
 };
 

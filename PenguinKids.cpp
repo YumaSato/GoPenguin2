@@ -51,6 +51,13 @@ int PenguinKids::selectAction() {
 	if (actFlag == 0) {
 		actFlag = attack();
 	}
+	if (item != nullptr) {
+		if (HP_Limit - HP > item->recoverPower && item->recoverPower >0) {//所持アイテムの回復力が0以上で、蓄積ダメージがアイテムによる回復量を上回っている場合
+			HP += item->recoverPower;
+			gameBuf->camera->actionMsg += "\n" + item->name + "を食べた。";
+			item = nullptr;
+		}
+	}
 	
 	
 	//deliverItem();
@@ -127,7 +134,7 @@ int PenguinKids::attack() {
 
 
 
-int PenguinKids::requestItem(int itemNum, int x, int y) {
+int PenguinKids::requestItem(int type, int x, int y) {
 	return 0;
 };
 
@@ -169,11 +176,13 @@ int PenguinKids::fishingItem() {
 
 		cx = x + dx;
 		cy = y + dy;
-		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物が居たら。
+		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいなければ
 			if (gameBuf->board.at(cx).at(cy).creature == nullptr) {
 
-				fishingTurn += GetRand(2) + 1;
-				if (fishingTurn >= 3) {
+				SETdirection(dx, dy);
+
+				//fishingTurn += GetRand(2) + 1;
+				//if (fishingTurn >= 3) {
 
 					if (GetRand(5) % 5 == 0) {//レアな魚
 						item = make_shared<Fish1>(Fish1());
@@ -186,13 +195,16 @@ int PenguinKids::fishingItem() {
 
 					fishingTurn = 0;
 					
-				}
-				else {
+				//}
+				/*else {
 					gameBuf->camera->actionMsg = name + "は、釣りをしている。";
-				}
+				}*/
 				return 1;
 			}
 		}
+	}//全ての方向がふさがっていたら
+	if (HP < HP_Limit / 2) {
+		requestItem(0,x,y);//回復アイテムを周囲に要求
 	}
 
 

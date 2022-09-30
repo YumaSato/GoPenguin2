@@ -73,7 +73,7 @@ public:
 	int castKids();
 	int useItem();
 	int castItem();
-	int requestItem(int itemNum, int x, int y);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	int requestItem(int type, int x, int y);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
 	int deliverItem();//
 	int fishingItem();
 
@@ -104,7 +104,7 @@ public:
 	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed);
 	int attack();
 	
-	int requestItem(int itemNum, int x, int y);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	int requestItem(int type, int x, int y);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
 	int deliverItem();//
 	int fishingItem();
 	
