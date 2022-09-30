@@ -151,6 +151,7 @@ shared_ptr<Item> PenguinKids::requestItem(int type, vector<PenguinKids*> confirm
 	int dy = 0;
 	int directRandom = 0;
 	int diCheck[4] = { 0,1,2,3 };
+	bool throughFlag = false;
 
 	for (int i = 0; i < 4; i++) {
 		int reorganize = GetRand(3 - i) + i;
@@ -160,6 +161,7 @@ shared_ptr<Item> PenguinKids::requestItem(int type, vector<PenguinKids*> confirm
 	}
 	for (int j = 0; j < 2; j++) {
 		for (int i = 0; i < 4; i++) {
+			throughFlag = false;
 			if (diCheck[i] == 0) {
 				dx = 1;
 				dy = 0;
@@ -181,8 +183,12 @@ shared_ptr<Item> PenguinKids::requestItem(int type, vector<PenguinKids*> confirm
 			cy = y + dy;
 			for (int cNum = 0; cNum < confirmed.size(); cNum++) {
 				if (cx == confirmed.at(cNum)->x && cy == confirmed.at(cNum)->y) {//依頼主の方向は無視する。
+					throughFlag = true;
 					continue;
 				}
+			}
+			if (throughFlag == true) {
+				continue;
 			}
 			
 			if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
