@@ -87,7 +87,7 @@ int Creature::castItem() {
 	return 0;
 };
 
-shared_ptr<Item> Creature::requestItem(int type, int clientX, int clientY) {
+shared_ptr<Item> Creature::requestItem(int type, vector<PenguinKids*> confirmed) {
 	return nullptr;
 };
 
