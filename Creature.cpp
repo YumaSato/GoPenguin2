@@ -87,8 +87,8 @@ int Creature::castItem() {
 	return 0;
 };
 
-int Creature::requestItem(int type, int x, int y) {
-	return 0;
+shared_ptr<Item> Creature::requestItem(int type, int clientX, int clientY) {
+	return nullptr;
 };
 
 int Creature::deliverItem() {

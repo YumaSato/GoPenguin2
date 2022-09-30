@@ -26,6 +26,7 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 		name = "青クローン";
 	}
 	SETdirection(DirectionX, DirectionY);
+	status = NORMAL;
 	x = ix;
 	y = iy;
 	speed = parentSpeed;
@@ -71,6 +72,7 @@ int PenguinKids::attack() {
 
 	int cx = 0;
 	int cy = 0;
+
 	int dx = 0;
 	int dy = 0;
 	int directRandom = 0;
@@ -107,7 +109,7 @@ int PenguinKids::attack() {
 			if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
 				if (gameBuf->board.at(cx).at(cy).creature->team != team) {//味方でなければ殴打。
 
-					gameBuf->board.at(cx).at(cy).creature->HP -= 5 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
+					gameBuf->board.at(cx).at(cy).creature->HP -= 4 * attackPower / gameBuf->board.at(cx).at(cy).creature->defensePower;
 					/*if (gameBuf->board.at(cx).at(cy).creature->HP <= 0) {
 						gameBuf->board.at(cx).at(cy).creature->HP = 0;
 					}*/
@@ -134,8 +136,104 @@ int PenguinKids::attack() {
 
 
 
-int PenguinKids::requestItem(int type, int x, int y) {
-	return 0;
+
+
+
+shared_ptr<Item> PenguinKids::requestItem(int type, int clientX, int clientY) {
+	int cx = 0;
+	int cy = 0;
+	int dx = 0;
+	int dy = 0;
+	int directRandom = 0;
+	int diCheck[4] = { 0,1,2,3 };
+
+	for (int i = 0; i < 4; i++) {
+		int reorganize = GetRand(3 - i) + i;
+		int exchange = diCheck[i];
+		diCheck[i] = diCheck[reorganize];
+		diCheck[reorganize] = exchange;
+	}
+	for (int i = 0; i < 4; i++) {
+		if (diCheck[i] == 0) {
+			dx = 1;
+			dy = 0;
+		}
+		if (diCheck[i] == 1) {
+			dx = -1;
+			dy = 0;
+		}
+		if (diCheck[i] == 2) {
+			dx = 0;
+			dy = 1;
+		}
+		if (diCheck[i] == 3) {
+			dx = 0;
+			dy = -1;
+		}
+
+		cx = x + dx;
+		cy = y + dy;
+		if (cx == clientX && cy == clientY) {//依頼主の方向は無視する。
+			continue;
+		}
+		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
+			if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+				if (gameBuf->board.at(cx).at(cy).creature->team == team && status == NORMAL) {
+					if (gameBuf->board.at(cx).at(cy).creature->item != nullptr) {
+						if (gameBuf->board.at(cx).at(cy).creature->item->itemType == type) {//リクエストされたアイテムが発見されたら
+							shared_ptr<Item> buf = gameBuf->board.at(cx).at(cy).creature->item;
+							gameBuf->board.at(cx).at(cy).creature->item = nullptr;
+							return buf;
+						}
+						//アイテムが見つかったのでreturn
+					}
+					
+				}
+			}
+		}
+	}
+	for (int i = 0; i < 4; i++) {//全方位調べた結果、アイテムを持っているやつはいなかったので、連携捜索を開始。
+		if (diCheck[i] == 0) {
+			dx = 1;
+			dy = 0;
+		}
+		if (diCheck[i] == 1) {
+			dx = -1;
+			dy = 0;
+		}
+		if (diCheck[i] == 2) {
+			dx = 0;
+			dy = 1;
+		}
+		if (diCheck[i] == 3) {
+			dx = 0;
+			dy = -1;
+		}
+		cx = x + dx;
+		cy = y + dy;
+		if (cx == clientX && cy == clientY) {//依頼主の方向は無視する。
+			continue;
+		}
+		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
+
+			//if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+			if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+				if (gameBuf->board.at(cx).at(cy).creature->team == team && status == NORMAL) {
+					shared_ptr<Item> itemBuf = gameBuf->board.at(cx).at(cy).creature->requestItem(type, x, y);
+					if (itemBuf != nullptr) {//何かしらのアイテムが返ってきてたらreturnする
+						return itemBuf;
+					}
+
+					//アイテムが見つかったのでreturn
+
+
+				}
+			}
+		}
+		
+	}
+
+	return nullptr;//アイテムどころか隣に味方すらいなかった場合
 };
 
 int PenguinKids::deliverItem() {
@@ -204,7 +302,13 @@ int PenguinKids::fishingItem() {
 		}
 	}//全ての方向がふさがっていたら
 	if (HP < HP_Limit / 2) {
-		requestItem(0,x,y);//回復アイテムを周囲に要求
+		shared_ptr<Item> itemBuf;
+		itemBuf = requestItem(0, x,y);//回復アイテムを周囲に要求
+		if (itemBuf != nullptr) {
+			item = itemBuf;
+			gameBuf->camera->actionMsg = "仲間から" + item->name + "を受け取った。";
+			return 1;
+		}
 	}
 
 
