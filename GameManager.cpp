@@ -107,6 +107,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 	if(gameMode == 1) {
 
 		if (goNextFlag == 1) {
+			
 			GoNext(gameBuf);
 			return 0;
 		}
@@ -159,6 +160,7 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 							camera->markX = mobsSpeedOrder.at(mobCount)->x;
 							camera->markY = mobsSpeedOrder.at(mobCount)->y;
 							goNextFlag = 1;
+							goNextKey = 0;
 							//break;
 						}
 						mobCount++;
@@ -185,6 +187,8 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 			}
 			if (rutine == 3) {
 				camera->markFlag = false;
+				//goNextFlag = 1;
+				goNextKey = 1;
 				if (GoNext(gameBuf) == 0) {
 					rutine = 0;
 				}
@@ -225,10 +229,23 @@ int GameManager::BattleMode(GameManager* gameBuf) {
 // keyBuf[KEY_INPUT_SPACE]
 
 int GameManager::GoNext(GameManager* gameBuf) {
-
-	if (returnKey[1] == 1) {
-		goNextFlag = 0;//フラグが降りる。
-		return 0;//goNextFlagにこれが代入されて、永遠にGoNextが呼ばれ続ける状態が解除される。
+	if (goNextKey == 0) {
+		if (returnKey[1] == 1) {
+			goNextFlag = 0;//フラグが降りる。
+			return 0;//goNextFlagにこれが代入されて、永遠にGoNextが呼ばれ続ける状態が解除される。
+		}
+	}
+	if (goNextKey == 1) {
+		if (numKey[1][1] == 1) {
+			goNextFlag = 0;//フラグが降りる。
+			return 0;//goNextFlagにこれが代入されて、永遠にGoNextが呼ばれ続ける状態が解除される。
+		}
+	}
+	if (goNextKey == 2) {
+		if (numKey[2][1] == 1) {
+			goNextFlag = 0;//フラグが降りる。
+			return 0;//goNextFlagにこれが代入されて、永遠にGoNextが呼ばれ続ける状態が解除される。
+		}
 	}
 	else {
 		return 1;

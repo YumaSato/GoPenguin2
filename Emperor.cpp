@@ -104,7 +104,7 @@ int Emperor::walk() {
 			cy += dy;
 
 			if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//áŠQ•¨‚ª‚È‚¯‚ê‚Îi‚ÞB
-				if (gameBuf->board.at(cx).at(cy).creature == nullptr) {
+				if (gameBuf->board.at(cx).at(cy).creature == nullptr && gameBuf->board.at(cx).at(cy).state == VACANT) {
 					gameBuf->board.at(x).at(y).creature = nullptr;
 					x = cx;
 					y = cy;
@@ -280,7 +280,7 @@ int Emperor::setKids() {
 	cx = x + directionX;
 	cy = y + directionY;
 	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//áŠQ•¨‚ª‚È‚¯‚ê‚ÎÝ’uB
-		if (gameBuf->board.at(cx).at(cy).creature == nullptr) {
+		if (gameBuf->board.at(cx).at(cy).creature == nullptr && gameBuf->board.at(cx).at(cy).state == VACANT) {
 
 			//PenguinKids kid = PenguinKids();
 			

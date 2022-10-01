@@ -255,6 +255,7 @@ public:
 	int mobCount = 0;//モブを順番に処理するときのインクリメント。
 
 	int goNextFlag = 0;
+	int goNextKey = 0;
 
 
 	//vector<PenguinKids> Kids;//子ペンギンを入れるメインとなる配列。

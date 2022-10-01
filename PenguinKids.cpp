@@ -304,7 +304,7 @@ int PenguinKids::fishingItem() {
 		cx = x + dx;
 		cy = y + dy;
 		if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいなければ
-			if (gameBuf->board.at(cx).at(cy).creature == nullptr) {
+			if (gameBuf->board.at(cx).at(cy).creature == nullptr && gameBuf->board.at(cx).at(cy).state == VACANT) {
 
 				SETdirection(dx, dy);
 
