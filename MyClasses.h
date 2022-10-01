@@ -131,7 +131,9 @@ public:
 	int useItem();
 	int castItem();
 
-
+	bool casting;
+	int pointX;
+	int pointY;
 };
 
 
@@ -204,7 +206,11 @@ public:
 
 	int markX;
 	int markY;
+	int subMarkX;
+	int subMarkY;
+
 	bool markFlag;//’–Úƒ}ƒX•\¦‚ğ‚·‚é‚©”Û‚©
+	int subMarkFlag;
 
 	int damageCount;
 	int castCount;

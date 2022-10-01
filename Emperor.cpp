@@ -47,6 +47,9 @@ int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int i
 	this->staminaRecoverAbility = 10;//毎ターン回復するスタミナ
 	this->staminaLimit = 15;
 	this->stamina = 15;
+	casting = false;
+	pointX = -1;
+	pointY = -1;
 
 	return 0;
 }
@@ -55,6 +58,7 @@ int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int i
 int Emperor::selectAction() {
 
 	bool finishFlag = false;
+	
 
 	gameBuf->camera->markX = x;
 	gameBuf->camera->markY = y;
@@ -63,28 +67,44 @@ int Emperor::selectAction() {
 	
 	gameBuf->camera->actionMsg = "left0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]);
 
-	changeDirection();
+	
 
-	if ( stamina > 0 ) {
-		walk();
-	}
-
-	if (numKey[1][1] == 1) {
-		finishFlag = setKids();
-	}
-	if (numKey[2][1] == 1) {
+	if (casting == true) {
 		finishFlag = castKids();
 	}
-	if (numKey[3][1] == 1) {
-		finishFlag = attack();
+	else {
+		changeDirection();
+
+		if (stamina > 0) {
+			walk();
+		}
+
+		if (numKey[1][1] == 1) {
+			finishFlag = setKids();
+		}
+		if (numKey[2][1] == 1) {
+			if (casting == false) {
+				castKids();//cast実行中を意味するcastingという印は、castKids内で初期処理を終えてから変える
+				casting = true;
+			}
+		}
+
+
+
+
+		if (numKey[3][1] == 1) {
+			finishFlag = attack();
+		}
+
 	}
-
-
-	if ( returnKey[1] == 1 || finishFlag == true) {
+	if (returnKey[1] == 1 || finishFlag == true) {
 		stamina += staminaRecoverAbility;
 		if (stamina > staminaLimit) {
 			stamina = staminaLimit;
 		}
+		casting = false;
+		pointX = x;
+		pointY = y;
 		return 1;
 	}
 	return 0;
@@ -298,8 +318,101 @@ int Emperor::setKids() {
 }
 
 int Emperor::castKids() {
-	return 0;
-}
+//	int cx = x;
+//	int cy = y;
+//	int GridAttention = 1;
+//	bool finish = false;
+//
+//	if (casting == true && escapeKey[1] == 1) {//キャストを実行せず終了するとき
+//		casting = false;
+//		GridAttention = 0;
+//		gameBuf->camera->subMarkFlag = 0;
+//		return 0;
+//	}
+//
+//	
+//	if (pointX == x && pointY == y &&(pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0)) {//最初に方向を決める段階
+//		if (changeDirection() == 1) {//方向ボタンが押されたら
+//
+//			pointX = x + directionX;
+//			pointY = x + directionY;
+//			gameBuf->camera->subMarkX = pointX;
+//			gameBuf->camera->subMarkY = pointY;
+//			gameBuf->camera->subMarkFlag = 1;
+//
+//		}
+//	}
+//	else {
+//		if (upKey[1] == 1 || downKey[1] == 1 || leftKey[1] == 1 || rightKey[1] == 1) {
+//			if (pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0) {
+//				if (pointX < x + directionX * 5 && pointX > x + directionX * 5 && pointY < y + directionX * 5 && pointY > y + directionX * 5) {
+//					pointX += directionX;
+//					pointY += directionY;
+//					pointX = x;
+//					pointY = y;
+//					gameBuf->camera->subMarkX = pointX;
+//					gameBuf->camera->subMarkY = pointY;
+//					gameBuf->camera->subMarkFlag = 1;
+//				}
+//			}
+//		}
+//	}
+//
+//	if (pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0) {
+//		if (gameBuf->board.at(pointX).at(pointY).creature == nullptr && gameBuf->board.at(pointX).at(pointY).state == VACANT) {//選択可能か判定
+//			//選択可能な場所だったので１
+//			if (returnKey[1] == 1) {
+//				gameBuf->kids[gameBuf->mobNum].setCharacter(team, directionX, directionY, pointX, pointY, speed);
+//				gameBuf->board.at(pointX).at(pointY).creature = &gameBuf->kids[gameBuf->mobNum];
+//				gameBuf->mobNum++;
+//
+//				casting = false;
+//				GridAttention = 0;
+//				gameBuf->camera->subMarkFlag = 0;
+//				finish = true;
+//			}
+//		}
+//	}
+//	if (casting == false) {//castKidsが一番最初に呼ばれたときにだけ行われる処理
+//		pointX = x;
+//		pointY = y;
+//
+//		for (int i = 1; i < 5; i++) {
+//			int leftX = x - i;
+//			int rightX = x + i;
+//			int upY = y - i;
+//			int downY = y + i;
+//
+//			if (leftX < 0) {//選択可能表示が、マスの外をいじってしまわないように処理
+//				leftX = 0;
+//			}
+//			if (rightX >= gameBuf->sizeX) {
+//				rightX = gameBuf->sizeX;
+//			}
+//			if (upY < 0) {
+//				upY = 0;
+//			}
+//			if (downY >= gameBuf->sizeY) {
+//				downY = gameBuf->sizeY;
+//			}
+//
+//			gameBuf->board.at(leftX).at(y).visual = GridAttention;
+//			gameBuf->board.at(leftX).at(upY).visual = GridAttention;
+//			gameBuf->board.at(leftX).at(downY).visual = GridAttention;
+//			gameBuf->board.at(rightX).at(y).visual = GridAttention;
+//			gameBuf->board.at(rightX).at(upY).visual = GridAttention;
+//			gameBuf->board.at(rightX).at(downY).visual = GridAttention;
+//			gameBuf->board.at(x).at(y - i).visual = GridAttention;
+//			gameBuf->board.at(x).at(y + i).visual = GridAttention;//8方向の射程範囲マスの表示を１（選択可能領域）に変更。
+//		}
+//	}
+//
+//
+//	if (finish == true) {
+//		return 1;
+//	}
+//	return 0;
+//}
 
 int Emperor::useItem() {
 	return 0;

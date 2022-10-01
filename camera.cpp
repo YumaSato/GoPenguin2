@@ -17,6 +17,10 @@ Camera::Camera(GameManager* battle) {//カメラのコンストラクタ
 	markY = 0;
 	markFlag = false;
 
+	subMarkX = 0;
+	subMarkY = 0;
+	subMarkFlag = 0;
+
 	damageCount = 0;
 	castCount = 0;
 	deliverCount = 0;
@@ -187,16 +191,25 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 						stripe = 1;
 					}
 				}
+
 				DrawGraph(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, handleField[stripe], TRUE);
 			}
 			if (gameBuf->board[ix][iy].state == ROCK) {
 				DrawBox(-exhibitX + ix * SQUARESIZE, -exhibitY + iy * SQUARESIZE, -exhibitX + ix * SQUARESIZE + 47, -exhibitY + iy * SQUARESIZE + 47, GetColor(205, 133, 63), TRUE);
 			}
+			if (gameBuf->board[ix][iy].visual == 1) {//選択マスになっている場合
+				DrawBox(-exhibitX + ix * SQUARESIZE + 3, -exhibitY + iy * SQUARESIZE + 3, -exhibitX + ix * SQUARESIZE + 45, -exhibitY + iy * SQUARESIZE + 45, GetColor(153, 255, 153), TRUE);
+			}
+
 
 
 			if (markFlag == TRUE && markX == ix && markY == iy) {//注目対象キャラのマスに注目用の円を表示するか否か
 				DrawBox(-exhibitX + markX * 48 + 4, -exhibitY + markY * 48 + 4, -exhibitX + markX * 48 + 44, -exhibitY + markY * 48 + 44, GetColor(255, 200, 0), TRUE);
 			}
+			if (subMarkFlag == TRUE && subMarkX == ix && subMarkY == iy) {//選択注目対象のマスに注目用の円を表示するか否か
+				DrawBox(-exhibitX + markX * 48 + 4, -exhibitY + markY * 48 + 4, -exhibitX + markX * 48 + 44, -exhibitY + markY * 48 + 44, GetColor(255, 128, 0), TRUE);
+			}
+
 
 
 
