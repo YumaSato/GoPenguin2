@@ -412,7 +412,7 @@ int Emperor::castKids() {
 //		return 1;
 //	}
 //	return 0;
-//}
+}
 
 int Emperor::useItem() {
 	return 0;
