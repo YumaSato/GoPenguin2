@@ -73,7 +73,7 @@ public:
 	int castKids();
 	int useItem();
 	int castItem();
-	shared_ptr<Item> requestItem(int type, vector<PenguinKids*> confirmed);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	shared_ptr<Item> requestItem(int type, vector<Creature*> confirmed);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
 	int deliverItem();//
 	int fishingItem();
 
@@ -104,7 +104,7 @@ public:
 	int setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int ix, int iy, int parentSpeed);
 	int attack();
 	
-	shared_ptr<Item> requestItem(int type, vector<PenguinKids*> confirmed);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
+	//shared_ptr<Item> requestItem(int type, vector<PenguinKids*> confirmed);//x,yは依頼主の座標。つまりこの関数を呼ぶ側の座標。
 	int deliverItem();//
 	int fishingItem();
 	

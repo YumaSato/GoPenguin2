@@ -259,7 +259,7 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 	DrawGraph(FIELDSIZE * SQUARESIZE, 0, handleBack[0], TRUE);
 
 
-	DrawString(FIELDSIZE * SQUARESIZE + 5, 20, mainMsg.c_str(), WHITE);
+	DrawString(FIELDSIZE * SQUARESIZE + 5, 45, mainMsg.c_str(), WHITE);
 	DrawString(FIELDSIZE * SQUARESIZE + 5, 170, actionMsg.c_str(), GetColor(255, 200, 255));
 
 	turn = "現在のターン:" + std::to_string(gameBuf->turnNum) + "   現在のrutine:" + std::to_string(gameBuf->rutine) ;

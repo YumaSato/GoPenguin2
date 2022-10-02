@@ -63,9 +63,10 @@ int Emperor::selectAction() {
 	gameBuf->camera->markX = x;
 	gameBuf->camera->markY = y;
 
+	gameBuf->camera->mainMsg = "1:クローンを設置。2:クローンを投げる。3:攻撃\n4:味方からアイテムを貰う。5:アイテムを使う。";
+
 	gameBuf->camera->actionMsg = name + "は何をする？";
-	
-	gameBuf->camera->actionMsg = "left0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]) + "\n青pointX:" + std::to_string(gameBuf->handledCharacters[1].pointX) + " Y:" + std::to_string(gameBuf->handledCharacters[1].pointY);
+	gameBuf->camera->actionMsg += "\nleft0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]) + "\n青pointX:" + std::to_string(gameBuf->handledCharacters[1].pointX) + " Y:" + std::to_string(gameBuf->handledCharacters[1].pointY);
 
 	
 
@@ -91,12 +92,29 @@ int Emperor::selectAction() {
 				casting = true;
 			}
 		}
-
-
-
-
 		if (numKey[3][1] == 1) {
 			finishFlag = attack();
+		}
+
+		if (numKey[4][1] == 1) {
+			if (gameBuf->board.at(x + directionX).at(y + directionY).creature != nullptr) {
+				if (gameBuf->board.at(x + directionX).at(y + directionY).creature->team == team) {
+
+					shared_ptr<Item> itemBuf;
+					vector<Creature*> confirmed;//調査済みペンギンを入れていく。これにより多重確認ループ地獄を起こさせない
+					confirmed.push_back(this);
+
+					itemBuf = requestItem(0, confirmed);//回復アイテムを周囲に要求
+					if (itemBuf != nullptr) {
+						item = itemBuf;
+						gameBuf->camera->actionMsg = "仲間から" + item->name + "を受け取った。";
+						finishFlag = true;
+					}
+				}
+			}
+		}
+		if (numKey[5][1] == 1) {
+			finishFlag = useItem();
 		}
 
 	}
@@ -443,6 +461,17 @@ int Emperor::castStart(int startOrFinish) {//スタートの時は1、
 }
 
 int Emperor::useItem() {
+	if (item != nullptr) {
+		if (item->itemType == 0) {
+			HP += item->recoverPower;
+			if (HP > HP_Limit) {
+				HP = HP_Limit;
+			}
+			gameBuf->camera->actionMsg = name + "は" + item->name + "を食べて体力を回復した。";
+			item = nullptr;
+			return 1;
+		}
+	}
 	return 0;
 }
 

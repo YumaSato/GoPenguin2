@@ -416,6 +416,44 @@ void getKey() {
 		numKey[4][1] = 0;
 	}
 
+	if (keyBuf[KEY_INPUT_5] == TRUE) {//5キー
+		if (numKey[5][0] == 0) {
+			numKey[5][1] = 1;
+		}
+		else {
+			numKey[5][1] = 0;
+		}
+		numKey[5][0] = 1;
+		numKey[5][2] = 0;
+	}
+	else if (keyBuf[KEY_INPUT_5] == FALSE) {
+		if (numKey[5][0] == 1) {
+			numKey[5][2] = 1;
+		}
+		numKey[5][0] = 0;
+		numKey[5][1] = 0;
+	}
+
+	if (keyBuf[KEY_INPUT_6] == TRUE) {//6キー
+		if (numKey[6][0] == 0) {
+			numKey[6][1] = 1;
+		}
+		else {
+			numKey[6][1] = 0;
+		}
+		numKey[6][0] = 1;
+		numKey[6][2] = 0;
+	}
+	else if (keyBuf[KEY_INPUT_6] == FALSE) {
+		if (numKey[6][0] == 1) {
+			numKey[6][2] = 1;
+		}
+		numKey[6][0] = 0;
+		numKey[6][1] = 0;
+	}
+
+
+
 
 	//int numKeyBuf = 0;
 	//if (keyBuf[KEY_INPUT_1] == TRUE) {

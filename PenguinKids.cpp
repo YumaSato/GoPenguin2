@@ -142,128 +142,128 @@ int PenguinKids::attack() {
 
 
 
-
-shared_ptr<Item> PenguinKids::requestItem(int type, vector<PenguinKids*> confirmed) {
-
-	int cx = 0;
-	int cy = 0;
-	int dx = 0;
-	int dy = 0;
-	int directRandom = 0;
-	int diCheck[4] = { 0,1,2,3 };
-	bool throughFlag = false;
-
-	for (int i = 0; i < 4; i++) {
-		int reorganize = GetRand(3 - i) + i;
-		int exchange = diCheck[i];
-		diCheck[i] = diCheck[reorganize];
-		diCheck[reorganize] = exchange;
-	}
-	for (int j = 0; j < 2; j++) {
-		for (int i = 0; i < 4; i++) {
-			throughFlag = false;
-			if (diCheck[i] == 0) {
-				dx = 1;
-				dy = 0;
-			}
-			if (diCheck[i] == 1) {
-				dx = -1;
-				dy = 0;
-			}
-			if (diCheck[i] == 2) {
-				dx = 0;
-				dy = 1;
-			}
-			if (diCheck[i] == 3) {
-				dx = 0;
-				dy = -1;
-			}
-
-			cx = x + dx;
-			cy = y + dy;
-			for (int cNum = 0; cNum < confirmed.size(); cNum++) {
-				if (cx == confirmed.at(cNum)->x && cy == confirmed.at(cNum)->y) {//依頼主の方向は無視する。
-					throughFlag = true;
-					continue;
-				}
-			}
-			if (throughFlag == true) {
-				continue;
-			}
-			
-			if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
-				if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
-					
-					if (gameBuf->board.at(cx).at(cy).creature->team == team && status == NORMAL) {
-						if (j == 0) {
-							if (gameBuf->board.at(cx).at(cy).creature->item != nullptr) {
-								if (gameBuf->board.at(cx).at(cy).creature->item->itemType == type) {//リクエストされたアイテムが発見されたら
-									shared_ptr<Item> buf = gameBuf->board.at(cx).at(cy).creature->item;
-									gameBuf->board.at(cx).at(cy).creature->item = nullptr;
-									return buf;
-								}
-								//アイテムが見つかったのでreturn
-							}
-
-						}
-						if (j == 1) {
-							
-							shared_ptr<Item> itemBuf = nullptr;
-							PenguinKids* kidsBuf = static_cast<PenguinKids*>(gameBuf->board.at(cx).at(cy).creature);
-							confirmed.push_back(kidsBuf);//もうすでに調べたからループさせないために調査対象除外リスト配列に、次のリクエスト主体をぶち込む。
-							itemBuf = kidsBuf->requestItem(type, confirmed);
-							if (itemBuf != nullptr) {//何かしらのアイテムが返ってきてたらreturnする
-								return itemBuf;
-							}
-						}
-					}
-					
-				}
-			}
-		}
-		
-	}
-
-	//for (int i = 0; i < 4; i++) {//全方位調べた結果、アイテムを持っているやつはいなかったので、連携捜索を開始。
-	//	if (diCheck[i] == 0) {
-	//		dx = 1;
-	//		dy = 0;
-	//	}
-	//	if (diCheck[i] == 1) {
-	//		dx = -1;
-	//		dy = 0;
-	//	}
-	//	if (diCheck[i] == 2) {
-	//		dx = 0;
-	//		dy = 1;
-	//	}
-	//	if (diCheck[i] == 3) {
-	//		dx = 0;
-	//		dy = -1;
-	//	}
-	//	cx = x + dx;
-	//	cy = y + dy;
-	//	if (cx == clientX && cy == clientY) {//依頼主の方向は無視する。
-	//		continue;
-	//	}
-	//	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
-
-	//		//if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
-	//		if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
-	//			if (gameBuf->board.at(cx).at(cy).creature->team == team && status == NORMAL) {
-	//				
-
-	//				//アイテムが見つかったのでreturn
-
-
-	//			}
-	//		}
-	//	}
-	//	
-	//}
-
-	return nullptr;//アイテムどころか隣に味方すらいなかった場合
-};
+//
+//shared_ptr<Item> PenguinKids::requestItem(int type, vector<PenguinKids*> confirmed) {
+//
+//	int cx = 0;
+//	int cy = 0;
+//	int dx = 0;
+//	int dy = 0;
+//	int directRandom = 0;
+//	int diCheck[4] = { 0,1,2,3 };
+//	bool throughFlag = false;
+//
+//	for (int i = 0; i < 4; i++) {
+//		int reorganize = GetRand(3 - i) + i;
+//		int exchange = diCheck[i];
+//		diCheck[i] = diCheck[reorganize];
+//		diCheck[reorganize] = exchange;
+//	}
+//	for (int j = 0; j < 2; j++) {
+//		for (int i = 0; i < 4; i++) {
+//			throughFlag = false;
+//			if (diCheck[i] == 0) {
+//				dx = 1;
+//				dy = 0;
+//			}
+//			if (diCheck[i] == 1) {
+//				dx = -1;
+//				dy = 0;
+//			}
+//			if (diCheck[i] == 2) {
+//				dx = 0;
+//				dy = 1;
+//			}
+//			if (diCheck[i] == 3) {
+//				dx = 0;
+//				dy = -1;
+//			}
+//
+//			cx = x + dx;
+//			cy = y + dy;
+//			for (int cNum = 0; cNum < confirmed.size(); cNum++) {
+//				if (cx == confirmed.at(cNum)->x && cy == confirmed.at(cNum)->y) {//依頼主の方向は無視する。
+//					throughFlag = true;
+//					continue;
+//				}
+//			}
+//			if (throughFlag == true) {
+//				continue;
+//			}
+//			
+//			if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
+//				if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+//					
+//					if (gameBuf->board.at(cx).at(cy).creature->team == team && status == NORMAL) {
+//						if (j == 0) {
+//							if (gameBuf->board.at(cx).at(cy).creature->item != nullptr) {
+//								if (gameBuf->board.at(cx).at(cy).creature->item->itemType == type) {//リクエストされたアイテムが発見されたら
+//									shared_ptr<Item> buf = gameBuf->board.at(cx).at(cy).creature->item;
+//									gameBuf->board.at(cx).at(cy).creature->item = nullptr;
+//									return buf;
+//								}
+//								//アイテムが見つかったのでreturn
+//							}
+//
+//						}
+//						if (j == 1) {
+//							
+//							shared_ptr<Item> itemBuf = nullptr;
+//							PenguinKids* kidsBuf = static_cast<PenguinKids*>(gameBuf->board.at(cx).at(cy).creature);
+//							confirmed.push_back(kidsBuf);//もうすでに調べたからループさせないために調査対象除外リスト配列に、次のリクエスト主体をぶち込む。
+//							itemBuf = kidsBuf->requestItem(type, confirmed);
+//							if (itemBuf != nullptr) {//何かしらのアイテムが返ってきてたらreturnする
+//								return itemBuf;
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+//		}
+//		
+//	}
+//
+//	//for (int i = 0; i < 4; i++) {//全方位調べた結果、アイテムを持っているやつはいなかったので、連携捜索を開始。
+//	//	if (diCheck[i] == 0) {
+//	//		dx = 1;
+//	//		dy = 0;
+//	//	}
+//	//	if (diCheck[i] == 1) {
+//	//		dx = -1;
+//	//		dy = 0;
+//	//	}
+//	//	if (diCheck[i] == 2) {
+//	//		dx = 0;
+//	//		dy = 1;
+//	//	}
+//	//	if (diCheck[i] == 3) {
+//	//		dx = 0;
+//	//		dy = -1;
+//	//	}
+//	//	cx = x + dx;
+//	//	cy = y + dy;
+//	//	if (cx == clientX && cy == clientY) {//依頼主の方向は無視する。
+//	//		continue;
+//	//	}
+//	//	if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {//マスの中で対象マスに生物がいれば
+//
+//	//		//if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+//	//		if (gameBuf->board.at(cx).at(cy).creature != nullptr) {
+//	//			if (gameBuf->board.at(cx).at(cy).creature->team == team && status == NORMAL) {
+//	//				
+//
+//	//				//アイテムが見つかったのでreturn
+//
+//
+//	//			}
+//	//		}
+//	//	}
+//	//	
+//	//}
+//
+//	return nullptr;//アイテムどころか隣に味方すらいなかった場合
+//};
 
 int PenguinKids::deliverItem() {
 	return 0;
@@ -332,7 +332,7 @@ int PenguinKids::fishingItem() {
 	}//全ての方向がふさがっていたら
 	if (HP < HP_Limit / 2) {
 		shared_ptr<Item> itemBuf;
-		vector<PenguinKids*> confirmed;//調査済みペンギンを入れていく。これにより多重確認ループ地獄を起こさせない
+		vector<Creature*> confirmed;//調査済みペンギンを入れていく。これにより多重確認ループ地獄を起こさせない
 		confirmed.push_back(this);
 
 		itemBuf = requestItem(0, confirmed);//回復アイテムを周囲に要求
