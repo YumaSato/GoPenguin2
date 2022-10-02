@@ -207,7 +207,7 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 				DrawBox(-exhibitX + markX * 48 + 4, -exhibitY + markY * 48 + 4, -exhibitX + markX * 48 + 44, -exhibitY + markY * 48 + 44, GetColor(255, 200, 0), TRUE);
 			}
 			if (subMarkFlag == TRUE && subMarkX == ix && subMarkY == iy) {//選択注目対象のマスに注目用の円を表示するか否か
-				DrawBox(-exhibitX + markX * 48 + 4, -exhibitY + markY * 48 + 4, -exhibitX + markX * 48 + 44, -exhibitY + markY * 48 + 44, GetColor(255, 128, 0), TRUE);
+				DrawBox(-exhibitX + subMarkX * 48 + 4, -exhibitY + subMarkY * 48 + 4, -exhibitX + subMarkX * 48 + 44, -exhibitY + subMarkY * 48 + 44, GetColor(255, 128, 0), TRUE);
 			}
 
 
@@ -262,7 +262,7 @@ void Camera::exhibitScreen() {//ペンギンを描画（ステータスと向きからペンギンの適
 	DrawString(FIELDSIZE * SQUARESIZE + 5, 20, mainMsg.c_str(), WHITE);
 	DrawString(FIELDSIZE * SQUARESIZE + 5, 170, actionMsg.c_str(), GetColor(255, 200, 255));
 
-	turn = "現在のターン:" + std::to_string(gameBuf->turnNum) + "   現在のrutine:" + std::to_string(gameBuf->rutine);
+	turn = "現在のターン:" + std::to_string(gameBuf->turnNum) + "   現在のrutine:" + std::to_string(gameBuf->rutine) ;
 	DrawString(FIELDSIZE * SQUARESIZE + 5, FIELDSIZE * SQUARESIZE - 20, turn.c_str(), GetColor(255, 200, 255));
 	//actionMsg = "";
 

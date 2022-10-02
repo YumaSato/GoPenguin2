@@ -65,12 +65,15 @@ int Emperor::selectAction() {
 
 	gameBuf->camera->actionMsg = name + "は何をする？";
 	
-	gameBuf->camera->actionMsg = "left0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]);
+	gameBuf->camera->actionMsg = "left0:" + std::to_string(leftKey[0]) + "   left1:" + std::to_string(leftKey[1]) + "  up0:" + std::to_string(upKey[0]) + "  up1:" + std::to_string(upKey[1]) + "\nright0:" + std::to_string(rightKey[0]) + "  right1:" + std::to_string(rightKey[1]) + "  down0:" + std::to_string(downKey[0]) + "  down1:" + std::to_string(downKey[1]) + "\nSHIFT:" + std::to_string(shiftKey[0]) + "  SPACE:" + std::to_string(spaceKey[0]) + "  Z:" + std::to_string(zKey[0]) + "\nnum1:" + std::to_string(numKey[1][0]) + "  num2:" + std::to_string(numKey[2][0]) + "\n青pointX:" + std::to_string(gameBuf->handledCharacters[1].pointX) + " Y:" + std::to_string(gameBuf->handledCharacters[1].pointY);
 
 	
 
 	if (casting == true) {
 		finishFlag = castKids();
+		if (finishFlag == false) {
+			return 0;
+		}
 	}
 	else {
 		changeDirection();
@@ -84,7 +87,7 @@ int Emperor::selectAction() {
 		}
 		if (numKey[2][1] == 1) {
 			if (casting == false) {
-				castKids();//cast実行中を意味するcastingという印は、castKids内で初期処理を終えてから変える
+				castStart(1);//cast実行中を意味するcastingという印は、castKids内で初期処理を終えてから変える
 				casting = true;
 			}
 		}
@@ -318,100 +321,125 @@ int Emperor::setKids() {
 }
 
 int Emperor::castKids() {
-//	int cx = x;
-//	int cy = y;
-//	int GridAttention = 1;
-//	bool finish = false;
-//
-//	if (casting == true && escapeKey[1] == 1) {//キャストを実行せず終了するとき
-//		casting = false;
-//		GridAttention = 0;
-//		gameBuf->camera->subMarkFlag = 0;
-//		return 0;
-//	}
-//
-//	
-//	if (pointX == x && pointY == y &&(pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0)) {//最初に方向を決める段階
-//		if (changeDirection() == 1) {//方向ボタンが押されたら
-//
-//			pointX = x + directionX;
-//			pointY = x + directionY;
-//			gameBuf->camera->subMarkX = pointX;
-//			gameBuf->camera->subMarkY = pointY;
-//			gameBuf->camera->subMarkFlag = 1;
-//
-//		}
-//	}
-//	else {
-//		if (upKey[1] == 1 || downKey[1] == 1 || leftKey[1] == 1 || rightKey[1] == 1) {
-//			if (pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0) {
-//				if (pointX < x + directionX * 5 && pointX > x + directionX * 5 && pointY < y + directionX * 5 && pointY > y + directionX * 5) {
-//					pointX += directionX;
-//					pointY += directionY;
-//					pointX = x;
-//					pointY = y;
-//					gameBuf->camera->subMarkX = pointX;
-//					gameBuf->camera->subMarkY = pointY;
-//					gameBuf->camera->subMarkFlag = 1;
-//				}
-//			}
-//		}
-//	}
-//
-//	if (pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0) {
-//		if (gameBuf->board.at(pointX).at(pointY).creature == nullptr && gameBuf->board.at(pointX).at(pointY).state == VACANT) {//選択可能か判定
-//			//選択可能な場所だったので１
-//			if (returnKey[1] == 1) {
-//				gameBuf->kids[gameBuf->mobNum].setCharacter(team, directionX, directionY, pointX, pointY, speed);
-//				gameBuf->board.at(pointX).at(pointY).creature = &gameBuf->kids[gameBuf->mobNum];
-//				gameBuf->mobNum++;
-//
-//				casting = false;
-//				GridAttention = 0;
-//				gameBuf->camera->subMarkFlag = 0;
-//				finish = true;
-//			}
-//		}
-//	}
-//	if (casting == false) {//castKidsが一番最初に呼ばれたときにだけ行われる処理
-//		pointX = x;
-//		pointY = y;
-//
-//		for (int i = 1; i < 5; i++) {
-//			int leftX = x - i;
-//			int rightX = x + i;
-//			int upY = y - i;
-//			int downY = y + i;
-//
-//			if (leftX < 0) {//選択可能表示が、マスの外をいじってしまわないように処理
-//				leftX = 0;
-//			}
-//			if (rightX >= gameBuf->sizeX) {
-//				rightX = gameBuf->sizeX;
-//			}
-//			if (upY < 0) {
-//				upY = 0;
-//			}
-//			if (downY >= gameBuf->sizeY) {
-//				downY = gameBuf->sizeY;
-//			}
-//
-//			gameBuf->board.at(leftX).at(y).visual = GridAttention;
-//			gameBuf->board.at(leftX).at(upY).visual = GridAttention;
-//			gameBuf->board.at(leftX).at(downY).visual = GridAttention;
-//			gameBuf->board.at(rightX).at(y).visual = GridAttention;
-//			gameBuf->board.at(rightX).at(upY).visual = GridAttention;
-//			gameBuf->board.at(rightX).at(downY).visual = GridAttention;
-//			gameBuf->board.at(x).at(y - i).visual = GridAttention;
-//			gameBuf->board.at(x).at(y + i).visual = GridAttention;//8方向の射程範囲マスの表示を１（選択可能領域）に変更。
-//		}
-//	}
-//
-//
-//	if (finish == true) {
-//		return 1;
-//	}
-//	return 0;
+	int cx = x;
+	int cy = y;
+	bool finish = false;
+
+	if (casting == true && numKey[2][1] == 1) {//キャストを実行せず終了するとき
+		casting = false;
+		castStart(0);
+		gameBuf->camera->subMarkFlag = 0;
+		return 0;
+	}
+
+
+	if (pointX == x && pointY == y && (pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0)) {//最初に方向を決める段階
+		if (changeDirection() == 1) {//方向ボタンが押されたら
+
+			pointX = x + directionX;
+			pointY = y + directionY;
+			gameBuf->camera->subMarkX = pointX;
+			gameBuf->camera->subMarkY = pointY;
+			gameBuf->camera->subMarkFlag = 1;
+			gameBuf->camera->mainMsg = "初期方向確定";
+		}
+	}
+	else if ((pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0)) {
+		if (upKey[1] == 1 || downKey[1] == 1 || leftKey[1] == 1 || rightKey[1] == 1) {
+			gameBuf->camera->mainMsg = "その方向に移動";
+			cx = pointX + directionX;
+			cy = pointY + directionY;
+			if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {
+				if (gameBuf->board.at(pointX + directionX).at(pointY + directionY).visual == 1) {
+					pointX += directionX;
+					pointY += directionY;
+					gameBuf->camera->subMarkFlag = 1;
+				}
+				else {
+					pointX = x;
+					pointY = y;
+					gameBuf->camera->subMarkFlag = 0;
+				}
+			}
+			else {
+				pointX = x;
+				pointY = y;
+				gameBuf->camera->subMarkFlag = 0;
+			}
+
+			gameBuf->camera->subMarkX = pointX;
+			gameBuf->camera->subMarkY = pointY;
+
+		}
+
+		if (returnKey[1] == 1) {
+			if (gameBuf->board.at(pointX).at(pointY).creature == nullptr && gameBuf->board.at(pointX).at(pointY).state == VACANT && gameBuf->board.at(pointX).at(pointY).visual == 1) {//選択可能か判定
+				//選択可能な場所だったので１
+
+				gameBuf->kids[gameBuf->mobNum].setCharacter(team, directionX, directionY, pointX, pointY, speed);
+				gameBuf->board.at(pointX).at(pointY).creature = &gameBuf->kids[gameBuf->mobNum];
+				gameBuf->mobNum++;
+				gameBuf->camera->mainMsg = "生成";
+				casting = false;
+				gameBuf->camera->subMarkFlag = 0;
+				castStart(0);
+				return 1;
+			}
+		}
+		
+	}
+	return 0;
+}
+
+int Emperor::castStart(int startOrFinish) {//スタートの時は1、
+	pointX = x;
+	pointY = y;
+	for (int i = 1; i < 5; i++) {
+		int leftX = x - i;
+		int rightX = x + i;
+		int upY = y - i;
+		int downY = y + i;
+
+		//if (leftX < 0) {//選択可能表示が、マスの外をいじってしまわないように処理
+		//	leftX = 0;
+		//}
+		//if (rightX >= gameBuf->sizeX) {
+		//	rightX = gameBuf->sizeX;
+		//}
+		//if (upY < 0) {
+		//	upY = 0;
+		//}
+		//if (downY >= gameBuf->sizeY) {
+		//	downY = gameBuf->sizeY;
+		//}
+
+		
+		if (leftX >= 1) {
+			gameBuf->board.at(leftX).at(y).visual = startOrFinish;
+			if (upY >= 1) {
+				gameBuf->board.at(leftX).at(upY).visual = startOrFinish;
+			}
+			if (downY < gameBuf->sizeY -1) {
+				gameBuf->board.at(leftX).at(downY).visual = startOrFinish;
+			}
+		}
+		if (rightX < gameBuf->sizeX -1) {
+			gameBuf->board.at(rightX).at(y).visual = startOrFinish;
+			if (upY >= 1) {
+				gameBuf->board.at(rightX).at(upY).visual = startOrFinish;
+			}
+			if (downY < gameBuf->sizeY -1) {
+				gameBuf->board.at(rightX).at(downY).visual = startOrFinish;
+			}
+		}
+		if (upY >= 1) {
+			gameBuf->board.at(x).at(y - i).visual = startOrFinish;
+		}
+		if (downY < gameBuf->sizeY -1) {
+			gameBuf->board.at(x).at(y + i).visual = startOrFinish;//8方向の射程範囲マスの表示を１（選択可能領域）に変更。
+		}
+	}
+	return 0;
 }
 
 int Emperor::useItem() {

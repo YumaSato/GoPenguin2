@@ -131,6 +131,9 @@ public:
 	int useItem();
 	int castItem();
 
+	int castStart(int startOrFinish);
+	//int castFinish();
+
 	bool casting;
 	int pointX;
 	int pointY;
