@@ -42,11 +42,11 @@ int Emperor::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, int i
 	this->status = EMPEROR;
 	this->HP = 50;
 	this->HP_Limit = 50;
-	this->attackPower = 30;
-	this->defensePower = 45;
+	this->attackPower = 70;
+	this->defensePower = 35;
 	this->staminaRecoverAbility = 10;//毎ターン回復するスタミナ
-	this->staminaLimit = 15;
-	this->stamina = 15;
+	this->staminaLimit = 8;
+	this->stamina = 8;
 	casting = false;
 	pointX = -1;
 	pointY = -1;
@@ -86,7 +86,7 @@ int Emperor::selectAction() {
 		if (numKey[1][1] == 1) {
 			finishFlag = setKids();
 		}
-		if (numKey[2][1] == 1) {
+		if (numKey[2][1] == 1 && stamina >= 1) {
 			if (casting == false) {
 				castStart(1);//cast実行中を意味するcastingという印は、castKids内で初期処理を終えてから変える
 				casting = true;
@@ -398,6 +398,7 @@ int Emperor::castKids() {
 				gameBuf->board.at(pointX).at(pointY).creature = &gameBuf->kids[gameBuf->mobNum];
 				gameBuf->mobNum++;
 				gameBuf->camera->mainMsg = "生成";
+				stamina -= 1;
 				casting = false;
 				gameBuf->camera->subMarkFlag = 0;
 				castStart(0);
@@ -405,6 +406,82 @@ int Emperor::castKids() {
 			}
 		}
 		
+	}
+	return 0;
+}
+
+
+
+
+int Emperor::jump() {
+	int cx = x;
+	int cy = y;
+	bool finish = false;
+
+	if (casting == true && numKey[6][1] == 1) {//キャストを実行せず終了するとき
+		casting = false;
+		castStart(0);
+		gameBuf->camera->subMarkFlag = 0;
+		return 0;
+	}
+
+	if (pointX == x && pointY == y && (pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0)) {//最初に方向を決める段階
+		if (changeDirection() == 1) {//方向ボタンが押されたら
+
+			pointX = x + directionX;
+			pointY = y + directionY;
+			gameBuf->camera->subMarkX = pointX;
+			gameBuf->camera->subMarkY = pointY;
+			gameBuf->camera->subMarkFlag = 1;
+			gameBuf->camera->mainMsg = "初期方向確定";
+		}
+	}
+	else if ((pointX < gameBuf->sizeX && pointX >= 0 && pointY < gameBuf->sizeY && pointY >= 0)) {
+		if (upKey[1] == 1 || downKey[1] == 1 || leftKey[1] == 1 || rightKey[1] == 1) {
+			gameBuf->camera->mainMsg = "その方向に移動";
+			cx = pointX + directionX;
+			cy = pointY + directionY;
+			if (cx < gameBuf->sizeX && cx >= 0 && cy < gameBuf->sizeY && cy >= 0) {
+				if (gameBuf->board.at(pointX + directionX).at(pointY + directionY).visual == 1) {
+					pointX += directionX;
+					pointY += directionY;
+					gameBuf->camera->subMarkFlag = 1;
+				}
+				else {
+					pointX = x;
+					pointY = y;
+					gameBuf->camera->subMarkFlag = 0;
+				}
+			}
+			else {
+				pointX = x;
+				pointY = y;
+				gameBuf->camera->subMarkFlag = 0;
+			}
+
+			gameBuf->camera->subMarkX = pointX;
+			gameBuf->camera->subMarkY = pointY;
+
+		}
+
+		if (returnKey[1] == 1) {
+			if (gameBuf->board.at(pointX).at(pointY).creature == nullptr && gameBuf->board.at(pointX).at(pointY).state == VACANT && gameBuf->board.at(pointX).at(pointY).visual == 1) {//選択可能か判定
+				//選択可能な場所だったので１
+
+				gameBuf->board.at(x).at(y).creature = nullptr;
+				x = pointX;
+				y = pointY;
+				gameBuf->board.at(pointX).at(pointY).creature = this;
+				gameBuf->mobNum++;
+				gameBuf->camera->mainMsg = "跳躍";
+				//stamina -= 1;
+				casting = false;
+				gameBuf->camera->subMarkFlag = 0;
+				castStart(0);
+				return 1;
+			}
+		}
+
 	}
 	return 0;
 }
@@ -468,6 +545,10 @@ int Emperor::useItem() {
 				HP = HP_Limit;
 			}
 			gameBuf->camera->actionMsg = name + "は" + item->name + "を食べて体力を回復した。";
+			if (item->name == "あ") {
+
+			}
+
 			item = nullptr;
 			return 1;
 		}

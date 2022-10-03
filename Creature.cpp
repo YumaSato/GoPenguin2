@@ -88,6 +88,7 @@ int Creature::castItem() {
 };
 
 shared_ptr<Item> Creature::requestItem(int type, vector<Creature*> confirmed) {
+
 	int cx = 0;
 	int cy = 0;
 	int dx = 0;
@@ -127,7 +128,6 @@ shared_ptr<Item> Creature::requestItem(int type, vector<Creature*> confirmed) {
 			for (int cNum = 0; cNum < confirmed.size(); cNum++) {
 				if (cx == confirmed.at(cNum)->x && cy == confirmed.at(cNum)->y) {//ˆË—Šå‚Ì•ûŒü‚Í–³‹‚·‚éB
 					throughFlag = true;
-					continue;
 				}
 			}
 			if (throughFlag == true) {
@@ -166,6 +166,7 @@ shared_ptr<Item> Creature::requestItem(int type, vector<Creature*> confirmed) {
 		}
 
 	}
+	return nullptr;
 };
 
 int Creature::deliverItem() {

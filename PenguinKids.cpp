@@ -33,7 +33,7 @@ int PenguinKids::setCharacter(Team ParentTeam, int DirectionX, int DirectionY, i
 	HP_Limit = 50;
 	HP = 50;
 	defensePower = 30;
-	attackPower = 30;
+	attackPower = 40;
 	num = gameBuf->mobNum;
 	fishingTurn = 0;
 	stamina = 10;

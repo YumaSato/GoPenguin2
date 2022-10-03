@@ -130,6 +130,7 @@ public:
 	int castKids();
 	int useItem();
 	int castItem();
+	int jump();
 
 	int castStart(int startOrFinish);
 	//int castFinish();
