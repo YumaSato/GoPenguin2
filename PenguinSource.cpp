@@ -127,9 +127,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 
-		if (CheckHitKey(KEY_INPUT_ESCAPE) == TRUE) {
+		/*if (CheckHitKey(KEY_INPUT_ESCAPE) == TRUE) {
 			return 0;
-		}
+		}*/
 
 
 
@@ -450,6 +450,24 @@ void getKey() {
 		}
 		numKey[6][0] = 0;
 		numKey[6][1] = 0;
+	}
+
+	if (keyBuf[KEY_INPUT_7] == TRUE) {//7ÉLÅ[
+		if (numKey[7][0] == 0) {
+			numKey[7][1] = 1;
+		}
+		else {
+			numKey[7][1] = 0;
+		}
+		numKey[7][0] = 1;
+		numKey[7][2] = 0;
+	}
+	else if (keyBuf[KEY_INPUT_6] == FALSE) {
+		if (numKey[7][0] == 1) {
+			numKey[7][2] = 1;
+		}
+		numKey[7][0] = 0;
+		numKey[7][1] = 0;
 	}
 
 

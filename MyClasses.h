@@ -131,11 +131,13 @@ public:
 	int useItem();
 	int castItem();
 	int jump();
+	int giveItem();
 
 	int castStart(int startOrFinish);
 	//int castFinish();
 
 	bool casting;
+	bool gettingItem;
 	int pointX;
 	int pointY;
 };
