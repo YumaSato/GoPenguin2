@@ -28,6 +28,7 @@ using std::to_string;
 //プロトタイプ宣言
 void handlePenguin();
 void getKey();
+int sampleCulc(int n);
 //void exhibitScreen(Grid board[FIELDSIZE][FIELDSIZE]);
 //void setCreature(int num, int ix, int iy);
 
@@ -58,6 +59,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	handlePenguin();//ペンギンの全ての画像データを読み込む。
 	
+	int sample = 0;//関数のおべんきょう！（いらないやつ）
+	sample = sampleCulc(3);
 
 	int game = 1;
 	bool debug = FALSE;
@@ -95,6 +98,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	GameManager* battle = NULL;
 
 	while (TRUE) {
+
+		//DrawString(FIELDSIZE * SQUARESIZE + 5, FIELDSIZE * SQUARESIZE - 20, std::to_string(sample).c_str(), GetColor(255, 200, 255));
+
 		if (ProcessMessage() != 0) { //ウィンドウの閉じるボタンが押されるとループを抜ける
 			break;
 		}
@@ -616,8 +622,12 @@ void getKey() {
 
 
 
-
-
+int sampleCulc(int n) {
+	if (n == 1) {
+		return 1;
+	}
+	return n * sampleCulc(n - 1);
+}
 
 
 
